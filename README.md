@@ -1,14 +1,6 @@
-# LearningQuest
-Projeto para Hackaton 2025/2026
+# Descrição da Aplicação – LearningQuest
+O LearningQuest é uma aplicação interativa com inteligência artificial que torna a aprendizagem de programação divertida, envolvente e acessível a todos. Através de desafios práticos e questionários personalizados, os utilizadores podem praticar código, ganhar pontos e evoluir de nível à medida que desenvolvem as suas competências.
 
+Com um sistema de gamificação inspirado em jogos competitivos, cada desafio concluído com sucesso oferece pontos e experiência. À medida que progrides, desbloqueias novos níveis, conteúdos e linguagens de programação, transformando o estudo numa verdadeira jornada de conquista e descoberta.
 
-## Descrição:
-Duolingo para pobles. Clash Royal Educativo. Trend de Africa. Medo do Tiktok. Redutor da Taxa de estupidez crónica.
-
-App com Ranks para ensinar a programar(pelo menos por agora...). Ganha pontos ao responder a desafios de programação, sobe de rank e aprende algo novo. Compete em ligas e torna-te o melhor da tua aldea.
-Desenvolvido para atrair a atenção de quem não tem atenção. A prova de que ainda à esperança para as crianças na geração da podridão mental chamada Tiktok.
-
-Em cada rank desbloqueias novas matérias, quando mais dificil mais pontos, quanto mais pontos, mais respeito tens pelos teus colegas e professores.
-Ninguém te respeita a menos que digas ser Rank mais alto no LearningQuest.
-
-Baixa já na Google Play... não tens internet, sem problemas, descarrega no pc da tua tribo.
+Criado para motivar e captar a atenção, o LearningQuest redefine a forma de aprender — mesmo para quem acredita que estudar pode ser aborrecido.
