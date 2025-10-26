@@ -1,72 +1,94 @@
-body{
-  margin:0;
-  padding:0;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+.not-found-page {
+  margin: 0;
+  padding: 0;
   font-family: 'Tomorrow', sans-serif;
-  height:100vh;
-background-image: linear-gradient(to top, #2e1753, #1f1746, #131537, #0d1028, #050819);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
+  height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(to top, 
+  #1c2a27,
+  #243c37, 
+  #2f4f45, 
+  #3a6053, 
+  #446E59);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
 }
-.text{
-  position:absolute;
-  top:10%;
-  color:#fff;
-  text-align:center;
+
+/* Texto principal */
+.not-found-page .text {
+  position: absolute;
+  top: 10%;
+  color: #fff;
+  text-align: center;
+  font-family: 'Poppins', sans-serif; /* 👈 letra arredondada */
 }
-h1{
-  font-size:50px;
+
+.not-found-page h1 {
+  font-size: 100px;
+  letter-spacing: 3px; /* opcional: dá mais espaçamento entre letras */
 }
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:#fff;
-  right:0;
-  animation:starTwinkle 3s infinite linear;
+
+
+/* Estrelas */
+.not-found-page .star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  right: 0;
+  animation: starTwinkle 3s infinite linear;
 }
-.astronaut img{
-  width:100px;
-  position:absolute;
-  top:55%;
-  animation:astronautFly 6s infinite linear;
+
+/* Astronauta */
+.not-found-page .astronaut img {
+  width: 100px;
+  position: absolute;
+  top: 55%;
+  animation: astronautFly 6s infinite linear;
 }
-@keyframes astronautFly{
-  0%{
-    left:-100px;
+
+@keyframes astronautFly {
+  0% {
+    left: -100px;
   }
-  25%{
-    top:50%;
-    transform:rotate(30deg);
+  25% {
+    top: 50%;
+    transform: rotate(30deg);
   }
-  50%{
-    transform:rotate(45deg);
-    top:55%;
+  50% {
+    transform: rotate(45deg);
+    top: 55%;
   }
-  75%{
-    top:60%;
-    transform:rotate(30deg);
+  75% {
+    top: 60%;
+    transform: rotate(30deg);
   }
-  100%{
-    left:110%;
-    transform:rotate(45deg);
+  100% {
+    left: 110%;
+    transform: rotate(45deg);
   }
 }
-@keyframes starTwinkle{
-  0%{
-     background:rgba(255,255,255,0.4);
+
+@keyframes starTwinkle {
+  0% {
+    background: rgba(255, 255, 255, 0.4);
   }
-  25%{
-    background:rgba(255,255,255,0.8);
+  25% {
+    background: rgba(255, 255, 255, 0.8);
   }
-  50%{
-   background:rgba(255,255,255,1);
+  50% {
+    background: rgba(255, 255, 255, 1);
   }
-  75%{
-    background:rgba(255,255,255,0.8);
+  75% {
+    background: rgba(255, 255, 255, 0.8);
   }
-  100%{
-    background:rgba(255,255,255,0.4);
+  100% {
+    background: rgba(255, 255, 255, 0.4);
   }
 }

@@ -3,14 +3,15 @@ import "./notFound.css";
 
 const NotFound = () => {
   useEffect(() => {
-    
-    const body = document.body;
+  
+    const page = document.querySelector(".not-found-page");
+
     const createStar = () => {
       const right = Math.random() * 500;
       const top = Math.random() * window.innerHeight;
       const star = document.createElement("div");
       star.classList.add("star");
-      body.appendChild(star);
+      page.appendChild(star);
 
       let pos = right;
       const runStar = () => {
@@ -27,6 +28,7 @@ const NotFound = () => {
     };
 
     const interval = setInterval(createStar, 100);
+
     return () => {
       clearInterval(interval);
       document.querySelectorAll(".star").forEach((el) => el.remove());
@@ -43,10 +45,7 @@ const NotFound = () => {
       </div>
 
       <div className="astronaut">
-        <img
-          src="\logoLearningQuest-NoBG.png"
-          alt="guaxini"
-        />
+        <img src="/astronauta_XL.png" alt="astronaut" />
       </div>
     </div>
   );
