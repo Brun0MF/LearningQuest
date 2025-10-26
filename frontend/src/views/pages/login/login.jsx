@@ -20,7 +20,7 @@ const Login = () => {
                 Login
             </button>
             <Link
-                to="/create"
+                to="/createaccount"
                 className="bg-white text-verdeSuave-600 font-medium min-w-full px-4 py-2 rounded-lg border border-verdeSuave-600 hover:bg-verdeSuave-100 text-center"
             >
                 Criar conta
