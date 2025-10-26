@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom"
 import './App.css'
 
+import NotFound from "./views/pages/error/notFound"
+
 //home
 import Home from "./views/pages/home/home"
 import BaseLayout from "./views/pages/layout/baseLayout"
@@ -10,7 +12,8 @@ import Login from "./views/pages/login/login"
 import Forgot from "./views/pages/login/forgotPass"
 import LoginLayout from "./views/pages/login/loginLayout"
 import CreateAccount from "./views/pages/login/createAccount"
-import Teste from "./views/pages/layout/teste"
+import NewPassword from "./views/pages/login/newPassword"
+import ConfirmEmail from "./views/pages/login/confirmEmail"
 
 function App() {
   return (
