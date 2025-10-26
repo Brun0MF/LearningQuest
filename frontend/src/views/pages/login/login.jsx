@@ -16,11 +16,11 @@ const Login = () => {
             <div className="mb-4">
                 <Link to={'/forgot'} className="text-sm text-verdeSuave-600 font-medium underline">Recuperar password</Link>
             </div>
-            <button className="bg-verdeSuave-600 text-white font-medium min-w-full px-4 py-2 rounded-lg mb-4">
+            <button className="bg-verdeSuave-600 text-white font-medium min-w-full px-4 py-2 rounded-lg mb-4 hover:bg-verdeSuave-700">
                 Login
             </button>
-            <button className="bg-white text-verdeSuave-600 font-medium min-w-full px-4 py-2 rounded-lg border border-verdeSuave-600">
-                Create Account
+            <button className="bg-white text-verdeSuave-600 font-medium min-w-full px-4 py-2 rounded-lg border border-verdeSuave-600 hover:bg-verdeSuave-100">
+                Criar conta
             </button>
         </div>
     );
