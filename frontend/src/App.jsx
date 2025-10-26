@@ -10,12 +10,13 @@ import Login from "./views/pages/login/login"
 import Forgot from "./views/pages/login/forgotPass"
 import LoginLayout from "./views/pages/login/loginLayout"
 import CreateAccount from "./views/pages/login/createAccount"
+import Teste from "./views/pages/layout/teste"
 
 function App() {
   return (
     <>
       <Routes>
-
+        <Route path="/teste" element={<Teste />}></Route>
         {/*LOGIN*/}
         <Route element={<LoginLayout />}>
           <Route path='/login' element={<Login />}></Route>
