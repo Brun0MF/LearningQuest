@@ -19,9 +19,12 @@ const Login = () => {
             <button className="bg-verdeSuave-600 text-white font-medium min-w-full px-4 py-2 rounded-lg mb-4 hover:bg-verdeSuave-700">
                 Login
             </button>
-            <button className="bg-white text-verdeSuave-600 font-medium min-w-full px-4 py-2 rounded-lg border border-verdeSuave-600 hover:bg-verdeSuave-100">
+            <Link
+                to="/create"
+                className="bg-white text-verdeSuave-600 font-medium min-w-full px-4 py-2 rounded-lg border border-verdeSuave-600 hover:bg-verdeSuave-100 text-center"
+            >
                 Criar conta
-            </button>
+            </Link>
         </div>
     );
 }
