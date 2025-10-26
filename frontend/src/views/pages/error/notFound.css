@@ -108,7 +108,6 @@
 /* Botão Voltar à Home */
 .home-button {
   display: inline-block;
-  margin-top: 50px;
   padding: 12px 28px;
   background-color: #5C8870; /* verde da tua paleta */
   color: #fff;
@@ -125,6 +124,3 @@
   box-shadow: 0 0 10px rgba(92, 136, 112, 0.6);
 }
 
-.divonica{
-  margin-bottom: 300px;
-}
