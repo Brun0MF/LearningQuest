@@ -3,7 +3,6 @@ import "./notFound.css";
 
 const NotFound = () => {
   useEffect(() => {
-  
     const page = document.querySelector(".not-found-page");
 
     const createStar = () => {
@@ -39,7 +38,16 @@ const NotFound = () => {
     <div className="not-found-page">
       <div className="text">
         <div>ERROR</div>
-        <h1>404</h1>
+        <h1>
+          4
+          <img
+            src="/astronauta_0.png"
+            alt="cabeca_astronauta"
+            className="zero-img"
+          />
+          4
+        </h1>
+
         <hr />
         <div>Page Not Found</div>
       </div>

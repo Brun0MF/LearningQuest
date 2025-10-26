@@ -37,6 +37,9 @@ function App() {
         </Route>
         {/*CONTEUDO DA PAGINA */}
 
+        {/*CATCH ALL*/}
+        <Route path="*" element={<NotFound />} />
+
       </Routes>
     </>
   )

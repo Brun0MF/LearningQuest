@@ -31,7 +31,10 @@
 
 .not-found-page h1 {
   font-size: 100px;
-  letter-spacing: 3px; /* opcional: dá mais espaçamento entre letras */
+  letter-spacing: 3px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
@@ -91,4 +94,13 @@
   100% {
     background: rgba(255, 255, 255, 0.4);
   }
+}
+/*guaxini cabeça*/
+.zero-img {
+  width: 100px;       
+  height: 100px;
+  object-fit: contain;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: float 4s ease-in-out infinite;
 }
