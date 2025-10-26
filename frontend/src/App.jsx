@@ -19,7 +19,6 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/not" element={<NotFound />}></Route>
         <Route path="/teste" element={<Teste />}></Route>
         {/*LOGIN*/}
         <Route element={<LoginLayout />}>
@@ -39,7 +38,7 @@ function App() {
 
         {/*CATCH ALL*/}
         <Route path="*" element={<NotFound />} />
-
+      
       </Routes>
     </>
   )
