@@ -30,7 +30,7 @@ import {
     AccountPreviewProps,
 } from '@toolpad/core/Account';
 import type { Navigation, Router, Session } from '@toolpad/core/AppProvider';
-import { DemoProvider } from '@toolpad/core/internal';
+
 
 const NAVIGATION: Navigation = [
     {
@@ -86,16 +86,16 @@ const NAVIGATION: Navigation = [
 const demoTheme = createTheme({
     palette: {
         primary: {
-            main: '#00B464',       // 🌿 o teu verde suave principal
-            light: '#4DDB9A',      // variação mais clara
-            dark: '#008C52',       // variação mais escura
+            main: '#00B464',
+            light: '#4DDB9A',
+            dark: '#008C52',
             contrastText: '#ffffff',
         },
         secondary: {
-            main: '#FFC107',       // opcional: cor secundária
+            main: '#FFC107',
         },
         background: {
-            default: '#F6F9F7',    // cor de fundo clara (tipo bg-verdeSuave-100)
+            default: '#F6F9F7',
             paper: '#FFFFFF',
         },
     },
@@ -316,7 +316,7 @@ export default function DashboardLayoutAccountSidebar(props: DemoProps) {
             branding={{
                 logo: <img src="LQ.png" alt="MUI logo" />,
                 title: '',
-                homeUrl: '/toolpad/core/introduction',
+                homeUrl: '/home',
             }}
             router={router}
             theme={demoTheme}
@@ -324,7 +324,6 @@ export default function DashboardLayoutAccountSidebar(props: DemoProps) {
             authentication={authentication}
             session={session}
         >
-            {/* preview-start */}
             <DashboardLayout
                 slots={{
                     toolbarActions: CustomToolbarActions,
@@ -333,7 +332,6 @@ export default function DashboardLayoutAccountSidebar(props: DemoProps) {
             >
                 <DemoPageContent pathname={pathname} />
             </DashboardLayout>
-            {/* preview-end */}
         </AppProvider>
     );
 }
