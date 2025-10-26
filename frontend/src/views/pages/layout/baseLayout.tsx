@@ -1,21 +1,41 @@
 import React from 'react';
-import Header from '../../components/base/header';
-import Sidebar from '../../components/base/sidebar';
-import Footer from '../../components/base/footer';
+import { SidebarProvider, useSidebar } from "../../components/base/sidebar/sidebarContext";
+import { Outlet } from "react-router";
+import Header from '../../components/base/header/header';
+import Sidebar from '../../components/base/sidebar/sidebar';
+import Backdrop from '../../components/base/sidebar/backdrop';
+import Footer from '../../components/base/footer/footer';
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+const LayoutContent: React.FC = () => {
+  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex flex-1">
+    <div className="min-h-screen xl:flex">
+      <div>
         <Sidebar />
-        <main className="flex-1 p-6">{children}</main>
+        <Backdrop />
       </div>
-      <Footer />
+      <div
+        className={`flex-1 transition-all duration-300 ease-in-out ${isExpanded || isHovered ? "lg:ml-[290px]" : "lg:ml-[90px]"
+          } ${isMobileOpen ? "ml-0" : ""}`}
+      >
+        <Header />
+        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+          <Outlet />
+        </div>
+        <Footer />
+      </div>
     </div>
   );
-}
+};
+
+const AppLayout: React.FC = () => {
+  return (
+    <SidebarProvider>
+      <LayoutContent />
+    </SidebarProvider>
+  );
+};
+
+export default AppLayout;

@@ -1,12 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
-  theme: { 
+  theme: {
     extend: {
       colors: {
         verdeSuave: {
           DEFAULT: '#C3D9C9',
-          50:  '#EAF2EB',
+          50: '#EAF2EB',
           100: '#DDE8DE',
           200: '#C3D9C9',
           300: '#A9C7B3',
@@ -18,7 +18,7 @@ module.exports = {
           900: '#153C2C',
         },
       }
-    } 
+    }
   },
   plugins: [],
 }

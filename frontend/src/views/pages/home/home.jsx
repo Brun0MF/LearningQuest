@@ -1,4 +1,4 @@
-import SideBarAndHeader from "../../components/base/header";
+import SideBarAndHeader from "../../components/base/header/header";
 
 
 const Home = () => {
