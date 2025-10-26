@@ -3,12 +3,13 @@ import './App.css'
 
 //home
 import Home from "./views/pages/home/home"
+import BaseLayout from "./views/pages/layout/baseLayout"
 
 //login
 import Login from "./views/pages/login/login"
 import Forgot from "./views/pages/login/forgotPass"
 import LoginLayout from "./views/pages/login/loginLayout"
-import BaseLayout from "./views/pages/layout/baseLayout"
+import CreateAccount from "./views/pages/login/createAccount"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<LoginLayout />}>
           <Route path='/login' element={<Login />}></Route>
           <Route path="/forgot" element={<Forgot />}></Route>
+          <Route path="/create" element={<CreateAccount />}></Route>
         </Route>
         {/*LOGIN*/}
 
