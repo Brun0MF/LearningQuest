@@ -1,11 +1,55 @@
-
+import { useEffect } from "react";
+import "./notFound.css";
 
 const NotFound = () => {
-    return(
-        <div>
-            
-        </div>
-    );
-}
+  useEffect(() => {
+    
+    const body = document.body;
+    const createStar = () => {
+      const right = Math.random() * 500;
+      const top = Math.random() * window.innerHeight;
+      const star = document.createElement("div");
+      star.classList.add("star");
+      body.appendChild(star);
+
+      let pos = right;
+      const runStar = () => {
+        if (pos >= window.innerWidth) {
+          star.remove();
+          clearInterval(interval);
+        }
+        pos += 3;
+        star.style.right = `${pos}px`;
+      };
+
+      star.style.top = `${top}px`;
+      const interval = setInterval(runStar, 10);
+    };
+
+    const interval = setInterval(createStar, 100);
+    return () => {
+      clearInterval(interval);
+      document.querySelectorAll(".star").forEach((el) => el.remove());
+    };
+  }, []);
+
+  return (
+    <div className="not-found-page">
+      <div className="text">
+        <div>ERROR</div>
+        <h1>404</h1>
+        <hr />
+        <div>Page Not Found</div>
+      </div>
+
+      <div className="astronaut">
+        <img
+          src="\logoLearningQuest-NoBG.png"
+          alt="guaxini"
+        />
+      </div>
+    </div>
+  );
+};
 
 export default NotFound;
