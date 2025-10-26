@@ -10,7 +10,7 @@ import Login from "./views/pages/login/login"
 import Forgot from "./views/pages/login/forgotPass"
 import LoginLayout from "./views/pages/login/loginLayout"
 import CreateAccount from "./views/pages/login/createAccount"
-
+import Teste from "./views/pages/layout/teste"
 
 function App() {
   return (
@@ -21,7 +21,9 @@ function App() {
         <Route element={<LoginLayout />}>
           <Route path='/login' element={<Login />}></Route>
           <Route path="/forgot" element={<Forgot />}></Route>
-          <Route path="/create" element={<CreateAccount />}></Route>
+          <Route path="/createaccount" element={<CreateAccount />}></Route>
+          <Route path="/newpassword" element={<NewPassword />}></Route>
+          <Route path="/confirmemail" element={<ConfirmEmail />}></Route>
         </Route>
         {/*LOGIN*/}
 
@@ -30,6 +32,9 @@ function App() {
           <Route path='/home' element={<Home />}></Route>
         </Route>
         {/*CONTEUDO DA PAGINA */}
+
+        {/*CATCH ALL*/}
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
     </>

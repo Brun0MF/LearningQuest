@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+.not-found-page {
+  margin: 0;
+  padding: 0;
+  font-family: 'Tomorrow', sans-serif;
+  height: 100vh;
+  width: 100%;
+  background-image: linear-gradient(to top, 
+  #1c2a27,
+  #243c37, 
+  #2f4f45, 
+  #3a6053, 
+  #446E59);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Texto principal */
+.not-found-page .text {
+  position: absolute;
+  top: 10%;
+  color: #fff;
+  text-align: center;
+  font-family: 'Poppins', sans-serif; /* 👈 letra arredondada */
+}
+
+.not-found-page h1 {
+  font-size: 100px;
+  letter-spacing: 3px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Estrelas */
+.not-found-page .star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #fff;
+  right: 0;
+  animation: starTwinkle 3s infinite linear;
+}
+
+/* Astronauta */
+.not-found-page .astronaut img {
+  width: 100px;
+  position: absolute;
+  top: 55%;
+  animation: astronautFly 6s infinite linear;
+}
+
+@keyframes astronautFly {
+  0% {
+    left: -100px;
+  }
+  25% {
+    top: 50%;
+    transform: rotate(30deg);
+  }
+  50% {
+    transform: rotate(45deg);
+    top: 55%;
+  }
+  75% {
+    top: 60%;
+    transform: rotate(30deg);
+  }
+  100% {
+    left: 110%;
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes starTwinkle {
+  0% {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  25% {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    background: rgba(255, 255, 255, 1);
+  }
+  75% {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    background: rgba(255, 255, 255, 0.4);
+  }
+}
+/*guaxini cabeça*/
+.zero-img {
+  width: 100px;       
+  height: 100px;
+  object-fit: contain;
+  border-radius: 50%;
+  vertical-align: middle;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Botão Voltar à Home */
+.home-button {
+  display: inline-block;
+  padding: 12px 28px;
+  background-color: #5C8870; /* verde da tua paleta */
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: 1px;
+}
+
+.home-button:hover {
+  background-color: #75A287; /* tom mais claro ao passar o rato */
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(92, 136, 112, 0.6);
+}
+

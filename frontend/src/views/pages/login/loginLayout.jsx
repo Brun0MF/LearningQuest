@@ -82,11 +82,11 @@ const LoginLayout = () => {
     }, []);
 
     return(
-        <div className="min-h-screen grid place-items-center bg-verdeSuave-100">
+        <div className="min-h-screen grid place-items-center bg-verdeSuave-300">
             <canvas id="bgCanvas" className="absolute inset-0"></canvas>
-            <div className="flex items-center justify-center bg-white p-5 border-2 rounded-xl border-verdeSuave gap-10 w-2/4 h-2/4 z-10">
+            <div className="flex items-center justify-center bg-white p-5 border-2 rounded-xl border-verdeSuave-400 gap-10 w-2/4 h-2/4 z-10">
                 <img src="/logoLearningQuest-NoBG.png" className="hidden md:block w-1/4" alt="" />
-                <Outlet />
+                <Outlet/>
             </div>
         </div>
     );
