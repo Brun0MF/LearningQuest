@@ -26,7 +26,7 @@
   top: 10%;
   color: #fff;
   text-align: center;
-  font-family: 'Poppins', sans-serif; /* 👈 letra arredondada */
+  font-family: 'Poppins', sans-serif; 
 }
 
 .not-found-page h1 {
@@ -109,7 +109,7 @@
 .home-button {
   display: inline-block;
   padding: 12px 28px;
-  background-color: #5C8870; /* verde da tua paleta */
+  background-color: #5C8870; 
   color: #fff;
   font-weight: 600;
   text-decoration: none;
@@ -119,7 +119,7 @@
 }
 
 .home-button:hover {
-  background-color: #75A287; /* tom mais claro ao passar o rato */
+  background-color: #75A287;
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(92, 136, 112, 0.6);
 }
