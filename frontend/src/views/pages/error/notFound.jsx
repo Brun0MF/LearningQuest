@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import "./notFound.css";
+import { Link } from "react-router-dom";
+import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
+
 
 const NotFound = () => {
   useEffect(() => {
@@ -50,11 +53,15 @@ const NotFound = () => {
 
         <hr />
         <div>Page Not Found</div>
+       <Link to="/home" className="home-button">
+          Home
+        </Link>
       </div>
 
       <div className="astronaut">
         <img src="/astronauta_XL.png" alt="astronaut" />
       </div>
+      
     </div>
   );
 };
