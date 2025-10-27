@@ -27,8 +27,8 @@ const navItems1: NavItem[] = [
     },
     {
         icon: <FaBook />,
-        name: "Cursos",
-        path: "/cursos",
+        name: "Jogos",
+        path: "/jogos",
     },
 ];
 
