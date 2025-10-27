@@ -9,17 +9,17 @@ const CardHome = () => {
             <div className="flex flex-row justify-between items-center p-2">
                 <h1 className="font-semibold text-2xl">Programação em C</h1>
                 <div className="flex flex-col items-center justify-center">
-                    <img src='../../../public/astronauta_0.png' width={50} alt="" className="-mb-4" />
+                    <img src='/astronauta_0.png' width={50} alt="" className="-mb-4" />
                     <Link to={'/jogos_niveis'} className="bg-verdeSuave-600 font-medium text-white py-2 px-5 rounded-xl hover:bg-verdeSuave-700">
                         Jogar
                     </Link>
                 </div>
 
             </div>
-            <div className="mb-3">
+            {/* <div className="mb-3">
                 Aprenda a programar em uma das linguagens mais poderosas e influentes da história da computação! O Curso de Programação em C foi criado para quem quer dominar a base da lógica de programação e compreender como os programas realmente funcionam “por dentro”.
-            </div>
-            <div className="flex flex-row gap-3">
+            </div> */}
+            <div className="flex sm:flex-row flex-col gap-3">
                 {frutas.map((fruta, index) => {
                     let cor = '';
                     let corMedalha = '';
@@ -41,7 +41,7 @@ const CardHome = () => {
                         corMedalha = 'text-gray-300';
                     }
                     return (
-                        <div key={index} className={`flex flex-row items-center gap-3 ${cor} w-1/3 py-1 px-3 rounded-xl border`}>
+                        <div key={index} className={`flex flex-row items-center gap-3 ${cor} sm:w-1/3 w-full py-1 px-3 rounded-xl border`}>
                             <FaMedal className={`${corMedalha} text-lg`} />
                             <span className="font-medium">{fruta}</span>
                         </div>

@@ -16,6 +16,8 @@ import NewPassword from "./views/pages/login/newPassword"
 import ConfirmEmail from "./views/pages/login/confirmEmail"
 import ListJogos from "./views/pages/jogos/list_jogos"
 import LevelMap from "./views/pages/jogos/LevelMap";
+import Classificacao from "./views/pages/classificacao/classificacoes"
+
 function App() {
   return (
     <>
@@ -36,6 +38,7 @@ function App() {
           <Route path='/home' element={<Home />}></Route>
           <Route path='/jogos' element={<ListJogos />}></Route>
           <Route path='/jogos_niveis' element={<LevelMap />} />
+          <Route path='/classificacoes' element={<Classificacao />}></Route>
         </Route>
         {/*CONTEUDO DA PAGINA */}
 
