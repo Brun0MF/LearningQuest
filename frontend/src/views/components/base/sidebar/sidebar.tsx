@@ -1,16 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
-import { ImMenu } from "react-icons/im";
-import { GiPodiumWinner } from "react-icons/gi";
 import { FaHouse } from "react-icons/fa6";
 import { FaBook, FaSignOutAlt } from "react-icons/fa";
 import { IoIosArrowDown, IoIosSettings } from "react-icons/io";
-import { IoPersonCircleSharp } from "react-icons/io5";
-import { BiWorld, BiSolidFlag } from "react-icons/bi";
+import { BiWorld } from "react-icons/bi";
 import { useSidebar } from "./sidebarContext";
-
-
+import { FaTrophy } from "react-icons/fa";
 
 type NavItem = {
     name: string;
@@ -27,21 +23,16 @@ const navItems1: NavItem[] = [
     },
     {
         icon: <FaBook />,
-        name: "Cursos",
-        path: "/cursos",
+        name: "Jogos",
+        path: "/jogos",
     },
 ];
 
 const navItems2: NavItem[] = [
     {
-        name: "Classificações Mundias",
-        icon: <BiWorld />,
-        path: "/classificacoes/mundiais",
-    },
-    {
-        name: "Classificações Regionais",
-        icon: <BiSolidFlag />,
-        path: "/classificacoes/mundiais",
+        name: "Classificações",
+        icon: <FaTrophy />,
+        path: "/classificacoes",
     },
 ];
 

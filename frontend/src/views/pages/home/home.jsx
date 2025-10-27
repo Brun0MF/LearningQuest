@@ -1,9 +1,16 @@
-import SideBarAndHeader from "../../components/base/header/header";
-
+import FiltrosHome from "../../components/home/filtros_home";
+import CardHome from "../../components/home/cards_home";
 
 const Home = () => {
     return (
-        <p>Home</p>
+        <div className="flex flex-col gap-4">
+            <FiltrosHome />
+            <div className="flex flex-col gap-4">
+                <CardHome />
+                <CardHome />
+                <CardHome />
+            </div>
+        </div>
     )
 }
 

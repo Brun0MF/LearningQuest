@@ -14,7 +14,8 @@ import LoginLayout from "./views/pages/login/loginLayout"
 import CreateAccount from "./views/pages/login/createAccount"
 import NewPassword from "./views/pages/login/newPassword"
 import ConfirmEmail from "./views/pages/login/confirmEmail"
-
+import ListJogos from "./views/pages/jogos/list_jogos"
+import LevelMap from "./views/pages/jogos/LevelMap";
 function App() {
   return (
     <>
@@ -33,6 +34,8 @@ function App() {
         {/*CONTEUDO DA PAGINA */}
         <Route element={<BaseLayout />}>
           <Route path='/home' element={<Home />}></Route>
+          <Route path='/jogos' element={<ListJogos />}></Route>
+          <Route path='/jogos_niveis' element={<LevelMap />} />
         </Route>
         {/*CONTEUDO DA PAGINA */}
 
