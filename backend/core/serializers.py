@@ -5,6 +5,9 @@ class UtilizadorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Utilizador
         fields = "__all__"
+        extra_kwargs = {
+            'password_utilizador': {'write_only': True}
+        }
 
 class CategoriasSerializer(serializers.ModelSerializer):
     class Meta:
