@@ -1,5 +1,6 @@
 
 
+<<<<<<< HEAD
 const FiltrosHome = ({categorias = [], categoriaId = "", onChangeCategoria}) => {
     
     return(
@@ -10,6 +11,14 @@ const FiltrosHome = ({categorias = [], categoriaId = "", onChangeCategoria}) => 
                 {categorias.map((cat) => (
                     <option key={cat.id_categoria} value={cat.id_categoria}>{cat.titulo_categoria}</option>
                 ))}
+=======
+const FiltrosHome = () => {
+
+    return (
+        <div className="flex flex-row gap-3 justify-between">
+            <select name="" id="" className="w-6/12 rounded-xl border border-verdeSuave-600 px-2 focus:border-verdeSuave focus:ring-2 focus:ring-verdeSuave outline-none transition-all">
+                <option value="">Categoria</option>
+>>>>>>> 2e818ed05d680bf099729894082d2ca33ff52e13
             </select>
         </div>
     );

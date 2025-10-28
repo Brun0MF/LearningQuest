@@ -16,8 +16,6 @@ const LevelPath = () => {
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
-     
-
       {/* Nuvens animadas */}
       <div
         style={{
@@ -36,6 +34,7 @@ const LevelPath = () => {
           const top = i * 300 + Math.random() * 200;
           const duration = 30 + Math.random() * 20;
           const delay = Math.random() * -20;
+
           return (
             <div
               key={i}
@@ -81,14 +80,24 @@ const LevelPath = () => {
       <style>
         {`
           @keyframes floatUpDown {
-            0% { transform: translateX(var(--offset-x)) translateY(0); }
-            50% { transform: translateX(var(--offset-x)) translateY(-15px); }
-            100% { transform: translateX(var(--offset-x)) translateY(0); }
+            0% {
+              transform: translateX(var(--offset-x)) translateY(0);
+            }
+            50% {
+              transform: translateX(var(--offset-x)) translateY(-15px);
+            }
+            100% {
+              transform: translateX(var(--offset-x)) translateY(0);
+            }
           }
-
+          
           @keyframes driftCloud {
-            0% { transform: translateX(-100px); }
-            100% { transform: translateX(100vw); }
+            0% {
+              transform: translateX(-100px);
+            }
+            100% {
+              transform: translateX(100vw);
+            }
           }
         `}
       </style>
@@ -108,6 +117,7 @@ const LevelPath = () => {
       >
         {levels.map((lvl, index) => {
           const offsetX = getHorizontalOffset(index);
+
           return (
             <div
               key={lvl}
@@ -136,9 +146,7 @@ const LevelPath = () => {
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.animation = `floatUpDown 1.5s ease-in-out infinite`)
                   }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.animation = "none")
-                  }
+                  onMouseLeave={(e) => (e.currentTarget.style.animation = "none")}
                 />
               </Link>
 
