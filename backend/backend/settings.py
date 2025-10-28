@@ -49,6 +49,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'id_utilizador', 
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -92,9 +96,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "hackathon",
+        "NAME": "LearningQuest",
         "USER": "postgres",
-        "PASSWORD": "Tecoree2023",
+        "PASSWORD": "nova_senha_forte",
         "HOST": "localhost",
         "PORT": "5432",
     }
