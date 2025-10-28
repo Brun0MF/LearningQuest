@@ -24,8 +24,7 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
     def pontuacaogeral_utilizador(self, request):
         qs = (
             Utilizador.objects
-            .annotate(total_pontos=Coalesce(Sum('pontuacoes__Pontos'), 0, output_field=IntegerField()))
-            .order_by('-total_pontos', 'Nome_Utilizador')
+            .order_by('-pontuacaogeral_utilizador', 'nome_utilizador')
         )
         ser = self.get_serializer(qs, many=True)
         return Response(ser.data, status=status.HTTP_200_OK)

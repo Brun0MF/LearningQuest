@@ -2,7 +2,7 @@ import { FaTrophy } from "react-icons/fa";
 import FiltrosClass from "../../components/classificacao/filtros_classificacao";
 import { getCategorias, getTopicos_categoria } from "../../../api/categoria";
 import { useState, useEffect } from "react";
-import { getUtilizadores } from "../../../api/utilizadores";
+import { getPontuacaoUtilizador, getUtilizadores } from "../../../api/utilizadores";
 
 const Classificacao = () => {
     const [activeTab, setActiveTab] = useState("geral");
@@ -43,7 +43,7 @@ const Classificacao = () => {
 
     const handleUtilizadores = async () => {
         try {
-            const response = await getUtilizadores();
+            const response = await getPontuacaoUtilizador();
             setPontuacaoGeral(response);
         } catch(e) {
             console.log(e);
@@ -75,8 +75,6 @@ const Classificacao = () => {
     useEffect(() => {
         handleTopicosCategoria(categoriaId);
     }, [categoriaId])
-
-    const frutas = ['Maçã', 'Banana', 'Laranja'];
 
     return (
         <div className="flex flex-col mx-[15%] gap-4 p-4">
