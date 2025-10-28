@@ -1,13 +1,13 @@
 import { FaMedal } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const CardHome = () => {
+const CardHome = ({topicos =[]}) => {
     const frutas = ['Maçã', 'Banana', 'Laranja'];
 
     return (
         <div className="flex flex-col gap-4 p-2 w-full rounded-xl border border-verdeSuave-600 bg-verdeSuave-50">
             <div className="flex flex-row justify-between items-center p-2">
-                <h1 className="font-semibold text-2xl">Programação em C</h1>
+                <h1 className="font-semibold text-2xl">{topicos.titulo_topico}</h1>
                 <div className="flex flex-col items-center justify-center">
                     <img src='/astronauta_0.png' width={50} alt="" className="-mb-4" />
                     <Link to={'/jogos_niveis'} className="bg-verdeSuave-600 font-medium text-white py-2 px-5 rounded-xl hover:bg-verdeSuave-700">
