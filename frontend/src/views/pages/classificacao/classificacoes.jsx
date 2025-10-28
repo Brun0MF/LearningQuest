@@ -5,7 +5,7 @@ const Classificacao = () => {
     const frutas = ['Maçã', 'Banana', 'Laranja'];
 
     return (
-        <div className="flex flex-col mx-[15%] gap-4">
+        <div className="flex flex-col mx-[15%] gap-4 p-4">
             <FiltrosHome />
             <div className="flex flex-col gap-4 justify-center items-center">
                 <div className="flex flex-row gap-6 items-center justify-center">

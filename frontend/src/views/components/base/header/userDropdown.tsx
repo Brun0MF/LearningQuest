@@ -20,12 +20,16 @@ export default function UserDropdown() {
                 className="flex items-center text-gray-700 dropdown-toggle"
             >
                 <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-                    <img src="/logoLearningQuest-NoBG.png" alt="User" />
+                    <img
+                        src="/login.jpg"
+                        alt="User"
+                        className="object-cover w-full h-full"
+                    />
                 </span>
 
-                <span className="block mr-1 font-medium text-theme-sm">Diogo Oliveira</span>
+                <span className="hidden lg:block mr-1 font-medium text-theme-sm">Diogo Oliveira</span>
                 <svg
-                    className={`stroke-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                    className={`hidden stroke-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
                         }`}
                     width="18"
                     height="20"
