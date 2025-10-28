@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
 import { FaHouse } from "react-icons/fa6";
-import { FaBook, FaSignOutAlt } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
 import { IoIosArrowDown, IoIosSettings } from "react-icons/io";
-import { BiWorld } from "react-icons/bi";
 import { useSidebar } from "./sidebarContext";
 import { FaTrophy } from "react-icons/fa";
+import { VscSignOut } from "react-icons/vsc";
 
 type NavItem = {
     name: string;
@@ -43,7 +43,7 @@ const othersItems: NavItem[] = [
         path: "/definicoes",
     },
     {
-        icon: <FaSignOutAlt />,
+        icon: <VscSignOut />,
         name: "Sign Out",
         path: "/login",
     },

@@ -2,7 +2,7 @@
 
 const FiltrosHome = () => {
 
-    return(
+    return (
         <div className="flex flex-row gap-3 justify-between">
             <select name="" id="" className="w-6/12 rounded-xl border border-verdeSuave-600 px-2 focus:border-verdeSuave focus:ring-2 focus:ring-verdeSuave outline-none transition-all">
                 <option value="">Categoria</option>
