@@ -19,6 +19,15 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
     serializer_class = UtilizadorSerializer
 
+    @action(detail=True, methods=["get"], url_path="pontuacao")
+    def pontuacaogeral_utilizador(self, request, pk=None) :
+        qs = (Utilizador.objects
+            .annotate(total_pontos=Coalesce(Sum('pontuacoes__Pontos'), 0, output_field=IntegerField()))
+            .order_by('-total_pontos', 'Nome_Utilizador')
+        )
+        ser = self.get_serializer(qs, many=True)
+        return Response(ser.data, status=status.HTTP_200_OK)
+
 class CategoriasViewSet(viewsets.ModelViewSet):
     queryset = Categorias.objects.all()
     serializer_class = CategoriasSerializer
