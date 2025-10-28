@@ -2,9 +2,13 @@ import { FaTrophy } from "react-icons/fa";
 import FiltrosClass from "../../components/classificacao/filtros_classificacao";
 import { getCategorias, getTopicos_categoria } from "../../../api/categoria";
 import { useState, useEffect } from "react";
+import { getUtilizadores } from "../../../api/utilizadores";
 
 const Classificacao = () => {
     const [activeTab, setActiveTab] = useState("geral");
+
+    const [pontuacaoGeral, setPontuacaoGeral] = useState([]);
+    const [pontuacaoCategoria, setPontuacaoCategoria] = useState([]);
 
     const [categorias, setCategorias] = useState([]);
     const [categoriaId, setCategoriaId] = useState("");
@@ -37,6 +41,15 @@ const Classificacao = () => {
         }
     }
 
+    const handleUtilizadores = async () => {
+        try {
+            const response = await getUtilizadores();
+            setPontuacaoGeral(response);
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     const onChangeCategoria = (e) => {
         const id = e.target.value;
         setCategoriaId(id);
@@ -50,6 +63,10 @@ const Classificacao = () => {
             console.log(e);
         }
     }
+
+    useEffect(() => {
+        handleUtilizadores();
+    }, [])
 
     useEffect(() => {
         handleCategorias();
@@ -91,6 +108,13 @@ const Classificacao = () => {
                 {activeTab === "geral" && (
                     <div id="geral" className="flex flex-col gap-5">
                         <div className="flex flex-col gap-4 justify-center items-center">
+                            {/* {pontuacaoGeral.map((geral) => (
+                                return(
+                                    <div>
+
+                                    </div>
+                                )
+                            ))} */}
                             <div className="flex flex-row gap-6 items-center justify-center">
                                 <div
                                     className="relative flex flex-col items-center justify-between w-1/4 max-w-md
