@@ -52,7 +52,7 @@ class PercursosViewSet(viewsets.ModelViewSet):
 
 
 # --- Criar Conta ---
-class CriarConta(ApiView):
+class CriarConta(APIView):
      def post(self, request):
         nome = request.data.get('nome_utilizador')
         email = request.data.get('email_utilizador')
