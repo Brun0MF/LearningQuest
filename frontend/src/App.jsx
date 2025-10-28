@@ -6,6 +6,10 @@ import NotFound from "./views/pages/error/notFound"
 //home
 import Home from "./views/pages/home/home"
 import BaseLayout from "./views/pages/layout/baseLayout"
+import ListJogos from "./views/pages/jogos/list_jogos"
+import LevelMap from "./views/pages/jogos/LevelMap";
+import Classificacao from "./views/pages/classificacao/classificacoes"
+import Definicoes from "./views/pages/definicoes/definicoes"
 
 //login
 import Login from "./views/pages/login/login"
@@ -14,9 +18,7 @@ import LoginLayout from "./views/pages/login/loginLayout"
 import CreateAccount from "./views/pages/login/createAccount"
 import NewPassword from "./views/pages/login/newPassword"
 import ConfirmEmail from "./views/pages/login/confirmEmail"
-import ListJogos from "./views/pages/jogos/list_jogos"
-import LevelMap from "./views/pages/jogos/LevelMap";
-import Classificacao from "./views/pages/classificacao/classificacoes"
+
 
 function App() {
   return (
@@ -39,6 +41,7 @@ function App() {
           <Route path='/jogos' element={<ListJogos />}></Route>
           <Route path='/jogos_niveis' element={<LevelMap />} />
           <Route path='/classificacoes' element={<Classificacao />}></Route>
+          <Route path='/definicoes' element={<Definicoes />}></Route>
         </Route>
         {/*CONTEUDO DA PAGINA */}
 
