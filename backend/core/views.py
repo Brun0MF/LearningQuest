@@ -1,13 +1,10 @@
 # core/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, viewsets
 from django.contrib.auth.hashers import make_password, check_password
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+
 from .models import Utilizador, Categorias, Topicos, Pontuacao, Percursos
 from .serializers import (
     UtilizadorSerializer, CategoriasSerializer, TopicosSerializer,
@@ -18,15 +15,6 @@ from .serializers import (
 class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
     serializer_class = UtilizadorSerializer
-
-    @action(detail=True, methods=["get"], url_path="pontuacao")
-    def pontuacaogeral_utilizador(self, request, pk=None) :
-        qs = (Utilizador.objects
-            .annotate(total_pontos=Coalesce(Sum('pontuacoes__Pontos'), 0, output_field=IntegerField()))
-            .order_by('-total_pontos', 'Nome_Utilizador')
-        )
-        ser = self.get_serializer(qs, many=True)
-        return Response(ser.data, status=status.HTTP_200_OK)
 
 class CategoriasViewSet(viewsets.ModelViewSet):
     queryset = Categorias.objects.all()
@@ -49,6 +37,7 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
 class PercursosViewSet(viewsets.ModelViewSet):
     queryset = Percursos.objects.all()
     serializer_class = PercursosSerializer
+<<<<<<< HEAD
 
 
 # --- Criar Conta ---
@@ -97,3 +86,5 @@ class LoginView(APIView):
                 'email_utilizador': user.email_utilizador
             }
         }, status=200)
+=======
+>>>>>>> 379ecdf4022e78b014a8fb61ca8691ee993579fc
