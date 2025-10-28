@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const LevelPath = () => {
   const levels = Array.from({ length: 10 }, (_, i) => i + 1);
-  const [score, setScore] = useState(5); // pontuação
   const [hoveredLevel, setHoveredLevel] = useState(null);
 
   const getHorizontalOffset = (index) => {
@@ -16,9 +15,7 @@ const LevelPath = () => {
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
-     
-
-      {/* Nuvens animadas */}
+      {/* Nuvens*/}
       <div
         style={{
           position: "absolute",
@@ -28,7 +25,7 @@ const LevelPath = () => {
           height: "100%",
           pointerEvents: "none",
           zIndex: 0,
-          overflow: "hidden",
+          overflow: "visible", 
         }}
       >
         {[...Array(8)].map((_, i) => {
@@ -86,9 +83,10 @@ const LevelPath = () => {
             100% { transform: translateX(var(--offset-x)) translateY(0); }
           }
 
+          
           @keyframes driftCloud {
-            0% { transform: translateX(-100px); }
-            100% { transform: translateX(100vw); }
+            0% { transform: translateX(-150px); }
+            100% { transform: translateX(calc(100vw + 200px)); }
           }
         `}
       </style>
@@ -119,7 +117,7 @@ const LevelPath = () => {
                 position: "relative",
               }}
             >
-              {/* Ilha flutuante */}
+              {/* Ilha */}
               <Link to={`/nivel/${lvl}`}>
                 <img
                   src="/flutua.png"
@@ -142,7 +140,7 @@ const LevelPath = () => {
                 />
               </Link>
 
-              {/* Imagem do nível sempre à frente */}
+              {/* Nível*/}
               <img
                 src={`/nivel/${lvl}.png`}
                 alt={`Pré-visualização do nível ${lvl}`}
