@@ -19,6 +19,7 @@ from .serializers import (
 class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
     serializer_class = UtilizadorSerializer
+
     @action(detail=False, methods=["get"], url_path="pontuacao")
     def pontuacaogeral_utilizador(self, request):
         qs = (
@@ -28,6 +29,66 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
         )
         ser = self.get_serializer(qs, many=True)
         return Response(ser.data, status=status.HTTP_200_OK)
+    
+    # LOGIN
+    @action(detail=False, methods=['post'], url_path='login')
+    def login(self, request):
+        email = request.data.get('email_utilizador')
+        password = request.data.get('password_utilizador')
+
+        try:
+            user = Utilizador.objects.get(email_utilizador=email)
+        except Utilizador.DoesNotExist:
+            return Response({'error': 'Email não encontrado'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not check_password(password, user.password_utilizador):
+            return Response({'error': 'Password incorreta'}, status=status.HTTP_400_BAD_REQUEST)
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            'message': 'Login bem-sucedido',
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': {
+                'id_utilizador': user.id_utilizador,
+                'nome_utilizador': user.nome_utilizador,
+                'email_utilizador': user.email_utilizador
+            }
+        }, status=status.HTTP_200_OK)
+
+    # CRIAR CONTA
+    @action(detail=False, methods=['post'], url_path='register')
+    def register(self, request):
+        nome = request.data.get('nome_utilizador')
+        email = request.data.get('email_utilizador')
+        password = request.data.get('password_utilizador')
+
+        if Utilizador.objects.filter(email_utilizador=email).exists():
+            return Response({'error': 'Email já registado'}, status=status.HTTP_400_BAD_REQUEST)
+
+        hashed_password = make_password(password)
+        user = Utilizador.objects.create(
+            nome_utilizador=nome,
+            email_utilizador=email,
+            password_utilizador=hashed_password,
+            pontuacaogeral_utilizador=0,
+            path_imagem=""
+        )
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            'message': 'Conta criada com sucesso!',
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': {
+                'id_utilizador': user.id_utilizador,
+                'nome_utilizador': user.nome_utilizador,
+                'email_utilizador': user.email_utilizador
+            }
+        }, status=status.HTTP_201_CREATED)
+
 
 class CategoriasViewSet(viewsets.ModelViewSet):
     queryset = Categorias.objects.all()
@@ -50,51 +111,3 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
 class PercursosViewSet(viewsets.ModelViewSet):
     queryset = Percursos.objects.all()
     serializer_class = PercursosSerializer
-
-
-# --- Criar Conta ---
-class CriarConta(APIView):
-     def post(self, request):
-        nome = request.data.get('nome_utilizador')
-        email = request.data.get('email_utilizador')
-        password = request.data.get('password_utilizador')
-
-        if Utilizador.objects.filter(email_utilizador=email).exists():
-            return Response({'error': 'Email já foi registado'}, status=400)
-
-        hashed_password = make_password(password)
-
-        Utilizador.objects.create(
-            nome_utilizador=nome,
-            email_utilizador=email,
-            password_utilizador=hashed_password,
-        )
-
-        return Response({'message': 'Conta criada com sucesso!'}, status=201)
-     
-# ---  Login ---
-class LoginView(APIView):
-    def post(self, request):
-        email = request.data.get('email_utilizador')
-        password = request.data.get('password_utilizador')
-
-        try:
-            user = Utilizador.objects.get(email_utilizador=email)
-        except Utilizador.DoesNotExist:
-            return Response({'error': 'Email não encontrado'}, status=400)
-
-        if not check_password(password, user.password_utilizador):
-            return Response({'error': 'Password incorreta'}, status=400)
-
-        refresh = RefreshToken.for_user(user)
-
-        return Response({
-            'message': 'Login bem-sucedido',
-            'access': str(refresh.access_token),
-            'refresh': str(refresh),
-            'user': {
-                'id_utilizador': user.id_utilizador,
-                'nome_utilizador': user.nome_utilizador,
-                'email_utilizador': user.email_utilizador
-            }
-        }, status=200)
