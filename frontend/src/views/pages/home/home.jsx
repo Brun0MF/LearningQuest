@@ -3,7 +3,7 @@ import CardHome from "../../components/home/cards_home";
 
 const Home = () => {
     return (
-        <div className="flex flex-col mx-[15%] gap-4">
+        <div className="flex flex-col mx-[15%] gap-4 p-4">
             <FiltrosHome />
             <div className="flex flex-col gap-4 justify-center ">
                 <CardHome />
