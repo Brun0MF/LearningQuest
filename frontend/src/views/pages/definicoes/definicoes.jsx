@@ -15,6 +15,10 @@ export default function Definicoes() {
                 <h2 className="mt-6 mb-5 text-lg font-semibold text-gray-800 lg:mb-7">
                     Mini-Game
                 </h2>
+                <p className="text-gray-600 mb-5">
+                    Aqui disponibilizamos um jogo simples e interativo, criado para te ajudar a
+                    passar o tempo e te entreteres enquanto exploras o site.
+                </p>
                 <div className="space-y-6">
                     <MiniGameRaccoon />
                 </div>

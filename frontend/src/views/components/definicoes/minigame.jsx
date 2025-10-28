@@ -331,23 +331,6 @@ export default function MiniGameRaccoon() {
             ctx.font = `${14 * s.scale}px Inter, sans-serif`;
             ctx.fillText("Pressione Espaço ou toque no botão para pular", W / 2, H / 2 + 12 * s.scale);
         }
-
-        // if gameover overlay
-        if (status === "gameover") {
-            ctx.fillStyle = "rgba(17,24,39,0.7)";
-            ctx.fillRect(W / 2 - 160 * s.scale, H / 2 - 54 * s.scale, 320 * s.scale, 108 * s.scale);
-            ctx.fillStyle = "#fff";
-            ctx.font = `${20 * s.scale}px Inter, sans-serif`;
-            ctx.textAlign = "center";
-            ctx.fillText("Game Over", W / 2, H / 2 - 12 * s.scale);
-            ctx.font = `${14 * s.scale}px Inter, sans-serif`;
-            ctx.fillText(`Score final: ${score}`, W / 2, H / 2 + 12 * s.scale);
-            ctx.fillStyle = "#10B981";
-            ctx.fillRect(W / 2 - 50 * s.scale, H / 2 + 22 * s.scale, 100 * s.scale, 26 * s.scale);
-            ctx.fillStyle = "#fff";
-            ctx.font = `${12 * s.scale}px Inter, sans-serif`;
-            ctx.fillText("Reiniciar", W / 2, H / 2 + 40 * s.scale);
-        }
     };
 
     // pequenas funções de desenho reutilizáveis
@@ -422,7 +405,7 @@ export default function MiniGameRaccoon() {
 
     // UI: botões e canvas
     return (
-        <div className="w-full max-w-3xl mx-auto">
+        <div className="w-full  mx-auto">
             <div className="rounded-2xl border border-gray-200 bg-white p-4 lg:p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                     <h3 className="text-lg font-semibold text-gray-800">Mini-Game 🦝</h3>
@@ -434,7 +417,7 @@ export default function MiniGameRaccoon() {
                                     if (status === "idle") startGame();
                                     else if (status === "gameover") restartGame();
                                 }}
-                                className="px-3 py-1 rounded-md bg-green-500 text-white text-sm hover:bg-green-600 transition"
+                                className="px-3 py-1 rounded-md bg-verdeSuave-500 text-white text-sm hover:bg-green-600 transition"
                             >
                                 {status === "idle" ? "Clique aqui para começar" : "Reniciar"}
                             </button>
@@ -463,7 +446,7 @@ export default function MiniGameRaccoon() {
                     <div className="absolute right-4 bottom-4">
                         <button
                             onClick={handleMobileJump}
-                            className="px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
+                            className="px-4 py-2 rounded-full bg-verdeSuave-600 text-white shadow-lg hover:bg-blue-700 transition"
                         >
                             Pular
                         </button>
@@ -471,7 +454,8 @@ export default function MiniGameRaccoon() {
                 </div>
 
                 <div className="mt-3 text-sm text-gray-500">
-                    <p>Use Espaço ou botões para pular. Objetivo: evitar obstáculos e bater o recorde!</p>
+                    <p>Usa a tecla Espaço ou os botões para pular. O objetivo é evitar os obstáculos e bater o teu recorde!</p>
+                    <p>Se perderes, pressiona Espaço para começar de novo.</p>
                 </div>
             </div>
         </div>

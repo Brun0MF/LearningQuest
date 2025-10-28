@@ -6,7 +6,6 @@ import NotFound from "./views/pages/error/notFound"
 //home
 import Home from "./views/pages/home/home"
 import BaseLayout from "./views/pages/layout/baseLayout"
-import ListJogos from "./views/pages/jogos/list_jogos"
 import LevelMap from "./views/pages/jogos/LevelMap";
 import Classificacao from "./views/pages/classificacao/classificacoes"
 import Definicoes from "./views/pages/definicoes/definicoes"
@@ -37,8 +36,7 @@ function App() {
 
         {/*CONTEUDO DA PAGINA */}
         <Route element={<BaseLayout />}>
-          <Route path='/home' element={<Home />}></Route>
-          <Route path='/jogos' element={<ListJogos />}></Route>
+          <Route path='/jogos' element={<Home />}></Route>
           <Route path='/jogos_niveis' element={<LevelMap />} />
           <Route path='/classificacoes' element={<Classificacao />}></Route>
           <Route path='/definicoes' element={<Definicoes />}></Route>

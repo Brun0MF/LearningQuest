@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
-import { FaHouse } from "react-icons/fa6";
-import { FaBook } from "react-icons/fa";
+import { FaGamepad } from "react-icons/fa";
 import { IoIosArrowDown, IoIosSettings } from "react-icons/io";
 import { useSidebar } from "./sidebarContext";
 import { FaTrophy } from "react-icons/fa";
@@ -17,12 +16,7 @@ type NavItem = {
 
 const navItems1: NavItem[] = [
     {
-        icon: <FaHouse />,
-        name: "Home",
-        path: "/home",
-    },
-    {
-        icon: <FaBook />,
+        icon: <FaGamepad />,
         name: "Jogos",
         path: "/jogos",
     },
@@ -266,7 +260,7 @@ const AppSidebar: React.FC = () => {
                                 height={40}
                             />
                             <img
-                                className="hidden dark:block"
+                                className="hidden lg:block"
                                 src="/LQ.png"
                                 alt="Logo"
                                 width={150}

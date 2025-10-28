@@ -55,7 +55,7 @@ const NotFound = () => {
                     <hr />
                     <div>Page Not Found</div>
                 </div>
-                <Link to="/home" className="home-button rounded-lg">
+                <Link to="/jogos" className="home-button rounded-lg">
                     Home
                 </Link>
             </div>

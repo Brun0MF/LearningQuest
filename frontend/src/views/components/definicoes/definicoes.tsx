@@ -32,9 +32,9 @@ export default function UserMetaCard() {
                 <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
                         <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full">
-                            <img src="/login.jpg"
+                            <img src="/gua1.png"
                                 alt="user"
-                                className="object-cover w-full h-full"
+                                className="object-contain w-full h-full"
                             />
                         </div>
                         <div className="order-3 xl:order-2">
@@ -137,7 +137,7 @@ export default function UserMetaCard() {
                                 <label className="block mb-2 text-sm font-medium text-gray-700">
                                     Escolhe uma imagem de perfil
                                 </label>
-                                <div className="grid grid-cols-6 gap-10">
+                                <div className="grid grid-cols-6 lg:grid-cols-3 gap-10">
                                     {profileImages.map((img, index) => (
                                         <div
                                             key={index}

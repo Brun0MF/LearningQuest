@@ -20,10 +20,9 @@ export default function UserDropdown() {
                 className="flex items-center text-gray-700 dropdown-toggle"
             >
                 <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-                    <img
-                        src="/login.jpg"
-                        alt="User"
-                        className="object-cover w-full h-full"
+                    <img src="/gua1.png"
+                        alt="user"
+                        className="object-contain w-full h-full"
                     />
                 </span>
 
