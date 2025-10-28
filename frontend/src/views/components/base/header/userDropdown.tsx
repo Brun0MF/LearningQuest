@@ -113,7 +113,7 @@ export default function UserDropdown() {
                     </li>
                 </ul>
                 <Link
-                    to="/signin"
+                    to="/login"
                     className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-red-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-red-700"
                 >
                     <svg
