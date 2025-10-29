@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Utilizador, Categorias, Topicos, Pontuacao, Percursos
+from .models import Utilizador, Categorias, Topicos, Pontuacao, Niveis, Perguntas
 
 class UtilizadorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +24,12 @@ class PontuacaoSerializer(serializers.ModelSerializer):
         model = Pontuacao
         fields = "__all__"
 
-class PercursosSerializer(serializers.ModelSerializer):
+class NiveisSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Percursos
+        model = Niveis
+        fields = "__all__"
+
+class PerguntasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Perguntas
         fields = "__all__"

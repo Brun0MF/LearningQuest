@@ -17,7 +17,7 @@ class MeuAdminSite(admin.AdminSite):
 
     def validacoes_view(self, request):
         # Aqui podes colocar queries ou lógica de validação
-        from .models import Utilizador, Categorias, Topicos, Percursos
+        from .models import Utilizador, Categorias, Topicos, Niveis, Perguntas
 
         # Exemplo: utilizadores com pontuação zero
         utilizadores_nao_validados = Utilizador.objects.filter(pontuacaogeral_utilizador=0)
@@ -34,9 +34,10 @@ class MeuAdminSite(admin.AdminSite):
 meu_admin_site = MeuAdminSite(name='meuadmin')
 
 # Registar modelos normais (exceto Pontuacao)
-from .models import Utilizador, Categorias, Topicos, Percursos
+from .models import Utilizador, Categorias, Topicos, Niveis, Perguntas
 
 meu_admin_site.register(Utilizador)
 meu_admin_site.register(Categorias)
 meu_admin_site.register(Topicos)
-meu_admin_site.register(Percursos)
+meu_admin_site.register(Niveis)
+meu_admin_site.register(Perguntas)
