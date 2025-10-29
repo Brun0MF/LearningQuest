@@ -16,7 +16,7 @@ export default function UserMetaCard() {
     const [isOpen, setIsOpen] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [utilizador, setUtilizador] = useState([]);
+    const [utilizador, setUtilizador] = useState<any>([]);
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
@@ -43,16 +43,16 @@ const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
       return;
     }
 
-    await editarPerfil(name, email, selectedImage || null, userId);
+    const formattedImage = selectedImage.replace(/^\/+/, ""); 
+    await editarPerfil(name, email, formattedImage, userId);
 
-    // Atualiza o estado local imediatamente (UX mais fluida)
     setUtilizador((prev: any) =>
       prev
         ? {
             ...prev,
             nome_utilizador: name,
             email_utilizador: email,
-            path_imagem: selectedImage || prev.path_imagem,
+            path_imagem:formattedImage,
           }
         : prev
     );
@@ -82,7 +82,8 @@ const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
                 <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
                         <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full">
-                            <img src="/gua1.png"
+                            <img 
+                                src={utilizador?.path_imagem ? `/${utilizador.path_imagem}` : "/gua1.png"}
                                 alt="user"
                                 className="object-contain w-full h-full"
                             />
