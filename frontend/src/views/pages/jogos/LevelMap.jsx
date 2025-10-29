@@ -153,8 +153,8 @@ const LevelPath = () => {
         {/* PONTUACAO */}
         <div className="flex flex-col -mt-10 bg-verdeSuave-100 rounded-lg p-3 w-2/3 gap-2 border border-verdeSuave-200">
           <div className="flex flex-row justify-between">
-            <span>Level {nivelAtual}</span>
-            <span className="p-1">{pontuacao.pontos} XP</span>
+            <span className="p-1 font-semibold">Nível {nivelAtual}</span>
+            <span className="p-1 font-semibold">{pontuacao.pontos} XP</span>
           </div>
           <div className="w-full border border-verdeSuave-400 rounded-lg h-3">
             <div

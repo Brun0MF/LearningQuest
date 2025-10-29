@@ -128,7 +128,10 @@ const QuizPopUp = ({onTerminar, incrementa = false, pontos = "", onPontuacaoChan
         })}
       </div>
 
-      <div className="flex flex-row justify-end gap-4">
+      <div className="flex flex-row justify-between gap-4">
+        <button onClick={onTerminar} className="rounded-xl px-3 py-2 text-white font-medium bg-red-600 hover:bg-red-700">
+          Terminar
+        </button>
         {!validated ? (
           <button
             onClick={handleValidate}
@@ -145,9 +148,6 @@ const QuizPopUp = ({onTerminar, incrementa = false, pontos = "", onPontuacaoChan
             Próxima
           </button>
         )}
-        <button onClick={onTerminar} className="rounded-xl px-3 py-2 text-white font-medium bg-red-600 hover:bg-red-700">
-          Terminar
-        </button>
       </div>
     </div>
   );

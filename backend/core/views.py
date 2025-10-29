@@ -221,6 +221,58 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_200_OK,
         )
+    
+    # Atualizar ou criar pontuação
+    @action(detail=False, methods=["post"], url_path="update-user-topic")
+    def update_user_topic(self, request):
+        uid = request.data.get("id_utilizador")
+        tid = request.data.get("id_topico")
+        pontos = request.data.get("pontos")
+
+        if not uid or not tid or pontos is None:
+            return Response(
+                {"error": "Parâmetros obrigatórios: id_utilizador, id_topico e pontos"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            uid = int(uid)
+            tid = int(tid)
+            pontos = int(pontos)
+        except ValueError:
+            return Response(
+                {"error": "id_utilizador, id_topico e pontos devem ser números inteiros"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        pontuacao_obj, created = Pontuacao.objects.get_or_create(
+            id_utilizador_id=uid, id_topico_id=tid,
+            defaults={"pontos": pontos}
+        )
+
+        if not created:
+            pontuacao_obj.pontos += pontos
+            pontuacao_obj.save()
+
+        total = (
+            Pontuacao.objects
+            .filter(id_utilizador_id=uid, id_topico_id=tid)
+            .aggregate(total=Coalesce(Sum("pontos"), 0))
+            ["total"]
+        )
+
+        return Response(
+            {
+                "id_utilizador": uid,
+                "id_topico": tid,
+                "pontos_adicionados": pontos,
+                "pontos_totais": total,
+                "mensagem": "Pontuação atualizada com sucesso"
+                if not created
+                else "Pontuação criada com sucesso",
+            },
+            status=status.HTTP_200_OK,
+        )
 
 class NiveisViewSet(viewsets.ModelViewSet):
     queryset = Niveis.objects.all()
@@ -241,6 +293,10 @@ class PerguntasViewSet(viewsets.ModelViewSet):
             in_nivel = request.query_params.get('nivel')
             in_linguagem = request.query_params.get('linguagem')
             
+            if((in_topico is None) or (in_nivel is None) or (in_linguagem is None)):
+                return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+
+
             try:
                 topico = Topicos.objects.get(id_topico=in_topico)
                 topico_titulo = topico.titulo_topico
@@ -273,15 +329,68 @@ class PerguntasViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_path="get_question")
     def get_question(self, request, pk=None):
+        in_pergunta = request.query_params.get('pergunta')
+        if(in_pergunta is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            pergunta = Perguntas.objects.get(id_pergunta=in_pergunta)
+            pergunta_cid = pergunta.cid
+            urlp = f"{url}get_question?cid={pergunta_cid}"
+            response = requests.get(urlp, timeout=300)
+            response.raise_for_status()
+            ai_json = response.json()
+        except Perguntas.DoesNotExist:
+                return Response(
+                    {"error": f"Pergunta com ID {in_pergunta} não existe."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        return Response(ai_json, status=status.HTTP_200_OK)
 
-        return Response({}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="get_level_questions")
+    def get_level_questions(self, request, pk=None):
+        
+        in_topico = request.query_params.get('topico')
+        in_nivel = request.query_params.get('nivel')
+        if(in_topico is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        if(in_nivel is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            pergunta = Perguntas.objects.get(id_topico=in_topico,id_nivel=in_nivel)
+            output = "["
+            for p in pergunta:
+                pergunta_cid = p.cid
+                urlp = f"{url}get_question?cid={pergunta_cid}"
+                response = requests.get(urlp, timeout=300)
+                response.raise_for_status()
+                ai_json = response.json()                
+                output += f"{ai_json}, "
+            output += "]"
+        except Perguntas.DoesNotExist:
+                return Response(
+                    {"error": f"Não existem perguntas com esse Topico e Nivel"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        return Response(output, status=status.HTTP_200_OK)
+
 
     @action(detail=True, methods=["post"], url_path="ipfs_connect")
     def ipfs_connect(self, request, pk=None):
+        in_endereco = request.query_params.get('endereco')
+        if(in_endereco is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        urlp = f"{url}connect?address={in_endereco}"
+        response = requests.post(urlp, timeout=300)
+        response.raise_for_status()
+        ai_json = response.json()
+        return Response(ai_json, status=status.HTTP_200_OK)
 
-        return Response({}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["get"], url_path="ipfs_address")
     def ipfs_address(self, request, pk=None):
-
-        return Response({}, status=status.HTTP_200_OK)
+        urlp = f"{url}address"
+        response = requests.get(urlp, timeout=300)
+        response.raise_for_status()
+        ai_json = response.json()
+        return Response(ai_json, status=status.HTTP_200_OK)
