@@ -1,114 +1,106 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Swal from "sweetalert2";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-const QuizPopUp = ({onTerminar, incrementa = false, pontos = "", onPontuacaoChange}) => {
-  const quizQuestions = [
-    {
-      pergunta:
-        "Qual das seguintes opções declara corretamente um ponteiro para um inteiro em linguagem C?",
-      opcoes: ["int p", "int *p", "int& p", "pointer int p"],
-      correta: 1,
-    },
-    {
-      pergunta: "Qual biblioteca deve ser incluída para usar a função printf()?",
-      opcoes: [
-        "#include <stdlib.h>",
-        "#include <stdio.h>",
-        "#include <string.h>",
-        "#include <math.h>",
-      ],
-      correta: 1,
-    },
-    {
-      pergunta: "Qual operador é usado para comparar igualdade em C?",
-      opcoes: ["=", "==", "===", "!="],
-      correta: 1,
-    },
-  ];
+const QuizPopUp = ({
+  perguntas = [],
+  onTerminar,
+  incrementa = false,
+  pontos = 0,
+  pontosMax = 0,
+  onPontuacaoChange,
+}) => {
+  const lista = useMemo(() => (Array.isArray(perguntas) ? perguntas : []), [perguntas]);
 
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
-  const [validated, setValidated] = useState(false); 
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
+  const [validated, setValidated] = useState(false);
 
-  const question = quizQuestions[current];
+  // ⚡ Atualiza quando perguntas mudam
+  useEffect(() => {
+    setCurrent(0);
+    setSelected(null);
+    setValidated(false);
+  }, [lista]);
+
+  const question = lista[current];
+  const opcoes = Array.isArray(question?.opcoes) ? question.opcoes : [];
 
   const handleValidate = () => {
-    if (selected === null) return;
-    if(incrementa) {
-      if (selected === question.correta) {
-        onPontuacaoChange(2);
-      } else {
-        onPontuacaoChange(-2);
-      }  
+    if (selected === null || !question) return;
+
+    const corretaIndex = Number(question.correta);
+    const acertou = selected === corretaIndex;
+
+    // Atualiza XP global
+    if (incrementa && typeof onPontuacaoChange === "function") {
+      onPontuacaoChange(acertou ? 2 : -2);
     }
-    
+
     setValidated(true);
   };
 
   const handleNext = () => {
-    if (current < quizQuestions.length - 1) {
-      setCurrent((c) => c + 1);
-      setSelected(null);
-      setValidated(false);
-    } else {
-      setFinished(true);
-    }
-  };
+    if (lista.length === 0) return;
 
-  const restart = () => {
-    setCurrent(0);
+    // Vai para a próxima pergunta (loop infinito)
+    const next = (current + 1) % lista.length;
+    setCurrent(next);
     setSelected(null);
     setValidated(false);
-    setScore(0);
-    setFinished(false);
   };
 
-  if (finished) {
-    return (
-      <div className="flex flex-col gap-6">
-        <h2 className="text-xl font-semibold">Resultado</h2>
-        <p className="text-lg">
-          Pontuação: <span className="font-bold">{score}</span> / {quizQuestions.length}
-        </p>
-        <button
-          onClick={restart}
-          className="rounded-xl px-4 py-2 text-white font-medium bg-verdeSuave-600 hover:bg-verdeSuave-700"
-        >
-          Recomeçar
-        </button>
-      </div>
-    );
-  }
+  // ⚡ Efeito: se atingir o máximo de pontos, mostra popup de sucesso
+  useEffect(() => {
+    if (incrementa && pontos >= pontosMax && pontosMax > 0) {
+      Swal.fire({
+        icon: "success",
+        title: "🎉 Nível concluído!",
+        text: "Parabéns! Conquistou todos os pontos deste nível.",
+        confirmButtonColor: "#16a34a",
+      }).then(() => {
+        onTerminar();
+      });
+    }
+  }, [pontos, pontosMax, incrementa, onTerminar]);
 
   return (
     <div className="flex flex-col gap-5">
-      {incrementa === false &&
-        <span className="flex flex-row items-center justify-center gap-2 rounded-lg py-1 px-3 text-center mt-5 text-sm text-gray-800 border border-blue-400 ring-1 ring-blue-200 bg-blue-100">
-          <AiOutlineExclamationCircle className="text-blue-500" /> Nível ultrapassado! Este questionário não vai alterar o seu xp atual.
+      {!incrementa && (
+        <span className="flex flex-row items-center justify-center gap-2 rounded-lg py-1 px-3 text-center mt-2 text-sm text-gray-800 border border-blue-400 ring-1 ring-blue-200 bg-blue-100">
+          <AiOutlineExclamationCircle className="text-blue-500" />
+          Nível ultrapassado! Este questionário não vai alterar o seu XP atual.
         </span>
-      }
-      <h2 className="text-lg font-semibold">{question.pergunta}</h2>
-      {pontos}
-      <div className="flex flex-col gap-2">
-        {question.opcoes.map((opcao, index) => {
-          const isSelected = selected === index;
+      )}
 
+      <h2 className="text-lg font-semibold">
+        {question?.pergunta ?? "Pergunta indisponível"}
+      </h2>
+
+      <div className="text-sm text-gray-600">
+        Pontos: <span className="font-bold">{pontos}</span> / {pontosMax}
+      </div>
+
+      <div className="flex flex-col gap-2">
+        {opcoes.map((opcao, index) => {
+          const isSelected = selected === index;
           let classes =
             "w-full p-2 rounded-xl border transition disabled:cursor-not-allowed";
 
           if (!validated) {
             classes +=
               " border-gray-600 hover:text-white hover:bg-gray-400" +
-              (isSelected ? "border border-0 ring-2 ring-gray-400 bg-gray-300" : "");
+              (isSelected
+                ? " border border-0 ring-2 ring-gray-400 bg-gray-300"
+                : "");
           } else {
+            const corretaIndex = Number(question.correta);
             if (index === selected) {
               classes +=
-                selected === question.correta
+                selected === corretaIndex
                   ? " border-green-600 bg-green-100 text-green-800"
                   : " border-red-600 bg-red-100 text-red-800";
-            } else if (index === question.correta) {
+            } else if (index === corretaIndex) {
               classes += " border-green-600 bg-green-50";
             } else {
               classes += " opacity-60";
@@ -129,9 +121,13 @@ const QuizPopUp = ({onTerminar, incrementa = false, pontos = "", onPontuacaoChan
       </div>
 
       <div className="flex flex-row justify-between gap-4">
-        <button onClick={onTerminar} className="rounded-xl px-3 py-2 text-white font-medium bg-red-600 hover:bg-red-700">
+        <button
+          onClick={onTerminar}
+          className="rounded-xl px-3 py-2 text-white font-medium bg-red-600 hover:bg-red-700"
+        >
           Terminar
         </button>
+
         {!validated ? (
           <button
             onClick={handleValidate}

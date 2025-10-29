@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import QuizPopUp from "../../components/quiz/popup";
-import { getPontuacao_user_topico } from "../../../api/pontuacao";
+import { getPontuacao_user_topico, updatePontuacao } from "../../../api/pontuacao";
 import { useParams } from "react-router-dom";
+import { getPerguntasNivel } from "../../../api/perguntas";
+import { getNivelTopico } from "../../../api/niveis";
 
 const LevelPath = () => {
   const levels = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -16,6 +18,8 @@ const LevelPath = () => {
   const closeModal = () => setIsOpen(false);
   const { id_topico } = useParams();
   const [incrementa, setIncrementa] = useState(false);
+  const [perguntas, setPerguntas] = useState([]);
+  const [nivelID, setNivelID] = useState("");
 
   const pontos = pontuacao?.pontos ?? 0;
   const nivelAtual = Math.min(10, Math.max(1, Math.ceil(pontos / 10)));
@@ -40,9 +44,30 @@ const LevelPath = () => {
     }
   }
 
-  const handleFim = () => {
+  const handleNivelTopicoPont = async (nivelSelecionado) => {
     try {
+      const pontosMax = nivelSelecionado * 10;
+      const response = await getNivelTopico(id_topico, pontosMax);
+      console.log(response);
+      setNivelID(response.id_nivel);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
+  const handlePerguntas = async () => {
+    try {
+      const response = getPerguntasNivel(id_topico, nivelID);
+      setPerguntas(response);
+    } catch (e) {
+      console.log(e);
+      setPerguntas([]);
+    }
+  }
+
+  const handleFim = async () => {
+    try {
+      await updatePontuacao(userId, id_topico, pontos);
       closeModal();
     } catch (e) {
       console.log(e);
@@ -180,13 +205,28 @@ const LevelPath = () => {
             >
               {/* Ilha flutuante */}
               <button
-                onClick={() => {
-                  setIsOpen(true);
-                  if (lvl === nivelAtual) {
-                    setIncrementa(true);
-                  } else {
-                    setIncrementa(false);
+                onClick={async () => {
+                  try {
+                    await handleNivelTopicoPont(lvl);
+                    await handlePerguntas();
+                    setIsOpen(true);
+                    handleNivelTopicoPont();
+                    console.log(nivelID)
+                    handlePerguntas();
+                    if (lvl === nivelAtual) {
+                      setIncrementa(true);
+                    } else {
+                      setIncrementa(false);
+                    }
+                  } catch (e) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Erro",
+                      text: "Não foi possível carregar os dados. Tente novamente.",
+                      confirmButtonColor: "#dc2626",
+                    });
                   }
+
                 }}
                 disabled={lvl > nivelAtual}
                 style={{
@@ -220,13 +260,6 @@ const LevelPath = () => {
                 />
               </button>
 
-              {isOpen && (
-                <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-50">
-                  <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full relative animate-fadeIn">
-                    <QuizPopUp onTerminar={handleFim} incrementa={incrementa} pontos={pontuacao.pontos} onPontuacaoChange={handlePontuacaoChange} />
-                  </div>
-                </div>
-              )}
               {/* Imagem do nível sempre à frente */}
               <img src={`/nivel/${lvl}.png`}
                 alt={`Pré-visualização do nível ${lvl}`}
@@ -251,6 +284,20 @@ const LevelPath = () => {
             </div>
           );
         })}
+        {isOpen && (
+          <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full relative animate-fadeIn">
+              <QuizPopUp
+                perguntas={perguntas}
+                onTerminar={handleFim}
+                incrementa={incrementa}
+                pontos={pontuacao.pontos}
+                pontosMax={nivelAtual * 10}
+                onPontuacaoChange={handlePontuacaoChange}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

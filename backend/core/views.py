@@ -251,7 +251,7 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
         )
 
         if not created:
-            pontuacao_obj.pontos += pontos
+            pontuacao_obj.pontos = pontos
             pontuacao_obj.save()
 
         total = (
@@ -278,6 +278,40 @@ class NiveisViewSet(viewsets.ModelViewSet):
     queryset = Niveis.objects.all()
     serializer_class = NiveisSerializer
 
+    #GEET NIVEL ATUAL
+    @action(detail=False, methods=["get"], url_path="by-topico-e-pontos")
+    def by_topico_e_pontos(self, request):
+        tid = request.query_params.get("id_topico")
+        pontos_max = request.query_params.get("pontos_max")
+
+        if not tid or pontos_max is None:
+            return Response(
+                {"error": "Parâmetros obrigatórios: id_topico e pontos_max"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            tid = int(tid)
+            pontos_max = int(pontos_max)
+        except ValueError:
+            return Response(
+                {"error": "id_topico e pontos_max devem ser inteiros"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        nivel = Niveis.objects.filter(
+            id_topico_id=tid,
+            pontos_max=pontos_max
+        ).first()
+
+        if not nivel:
+            return Response(
+                {"error": "Nenhum nível encontrado para este tópico e pontuação"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        data = self.get_serializer(nivel).data
+        return Response(data, status=status.HTTP_200_OK)
     
 class PerguntasViewSet(viewsets.ModelViewSet):
     queryset = Perguntas.objects.all()
