@@ -5,6 +5,8 @@ import PublicOutlinedIcon from '@mui/icons-material/PublicOutlined';
 
 
 const NotFound = () => {
+    const token = localStorage.getItem("access");
+
     useEffect(() => {
         const page = document.querySelector(".not-found-page");
 
@@ -56,7 +58,7 @@ const NotFound = () => {
                     <div>Page Not Found</div>
                 </div>
                 <Link to="/jogos" className="home-button rounded-lg">
-                    Home
+                    {token ? "Home" : "Login"}
                 </Link>
             </div>
 
