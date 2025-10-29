@@ -8,7 +8,7 @@ export const getUtilizadores = async () => {
 }
 
 export const getPontuacaoUtilizador = async () => {
-    const response = await axios.get(`${url}pontuacao`);
+    const response = await axios.get(`${url}pontuacao/`);
     return response.data;
 }
 

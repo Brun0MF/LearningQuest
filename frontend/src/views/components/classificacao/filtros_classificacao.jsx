@@ -1,6 +1,6 @@
 
 
-const FiltrosClass = ({categorias = [], categoriaId = "", topicosCategoria = [], topicoDisabled = true, onChangeCategoria, onApply}) => {
+const FiltrosClass = ({categorias = [], categoriaId = "", topicosCategoria = [], topicoId = "", topicoDisabled = true, onChangeCategoria, onChangeTopico, onApply}) => {
     
     return(
         <div className="flex flex-row gap-3 justify-between">
@@ -10,7 +10,7 @@ const FiltrosClass = ({categorias = [], categoriaId = "", topicosCategoria = [],
                     <option key={cat.id_categoria} value={cat.id_categoria}>{cat.titulo_categoria}</option>
                 ))}
             </select>
-            <select disabled={topicoDisabled} defaultValue="" className="w-3/6 rounded-xl border border-verdeSuave-600 px-2 focus:border-verdeSuave focus:ring-2 focus:ring-verdeSuave outline-none transition-all">
+            <select disabled={topicoDisabled} onChange={onChangeTopico} value={topicoId} className="w-3/6 rounded-xl border border-verdeSuave-600 px-2 focus:border-verdeSuave focus:ring-2 focus:ring-verdeSuave outline-none transition-all">
                 <option value="" selected disabled>Tópico</option>
                 {topicosCategoria.map((top) => (
                     <option key={top.id_topico} value={top.id_topico}>{top.titulo_topico}</option>

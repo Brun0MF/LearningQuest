@@ -24,7 +24,7 @@ const LayoutContent: React.FC = () => {
         <Header />  
         </div>
         
-        <div className="relative z-0 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+        <div className="relative z-0 mx-auto max-w-(--breakpoint-2xl) md:p-6 min-h-[calc(100vh-300px)]">
           <Outlet />
         </div>
         <Footer />
