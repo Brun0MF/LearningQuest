@@ -1,74 +1,185 @@
 import { FaTrophy } from "react-icons/fa";
-import FiltrosHome from "../../components/home/filtros_home";
+import FiltrosClass from "../../components/classificacao/filtros_classificacao";
+import { getCategorias, getTopicos_categoria } from "../../../api/categoria";
+import { useState, useEffect } from "react";
+import { getPontuacaoUtilizador, getUtilizadores } from "../../../api/utilizadores";
+import PontuacaoList from "../../components/classificacao/list_pontuacao";
+import { getPontuacaoTopico } from "../../../api/topico";
 
 const Classificacao = () => {
-    const frutas = ['Maçã', 'Banana', 'Laranja'];
+    const [activeTab, setActiveTab] = useState("geral");
+
+    const [pontuacaoGeral, setPontuacaoGeral] = useState([]);
+    const [pontuacaoCategoria, setPontuacaoCategoria] = useState([]);
+
+    const [categorias, setCategorias] = useState([]);
+    const [categoriaId, setCategoriaId] = useState("");
+
+    const [topicosCategoria, setTopicosCategoria] = useState([]);
+    const [topicoId, setTopicoId] = useState("");
+
+    const [loadingTopicos, setLoadingTopicos] = useState(false);
+    const [loadingPontuacao, setLoadingPontuacao] = useState(false);
+
+    const topicoDisabled = !categoriaId || loadingTopicos || topicosCategoria.length === 0;
+    const [topicoAplicado, setTopicoAplicado] = useState(false);
+
+    const handleCategorias = async () => {
+        try {
+            const response = await getCategorias();
+            setCategorias(response);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const handleTopicosCategoria = async (id_categoria) => {
+        try {
+            setLoadingTopicos(true);
+            const response = await getTopicos_categoria(id_categoria);
+            setTopicosCategoria(response);
+            console.log(response);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoadingTopicos(false);
+        }
+    }
+
+    const handlePontuacaoGeral = async () => {
+        try {
+            setLoadingPontuacao(true);
+            const response = await getPontuacaoUtilizador();
+            setPontuacaoGeral(response);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoadingPontuacao(false);
+        }
+    }
+
+    const handlePontuacaoCategoria = async (id_topico) => {
+        try {
+            setLoadingPontuacao(true);
+            const response = await getPontuacaoTopico(id_topico);
+            setPontuacaoCategoria(response);
+            console.log(pontuacaoCategoria);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoadingPontuacao(false);
+        }
+    }
+
+    const onChangeTopico = (e) => {
+        const id = e.target.value;
+        setTopicoId(id);
+    }
+
+    const onChangeCategoria = (e) => {
+        const id = e.target.value;
+        setCategoriaId(id);
+        setTopicoId("");
+        setTopicosCategoria([]);
+    }
+
+    const onApply = () => {
+        try {
+            if (!topicoId) {
+                alert("Por favor, selecione um tópico antes de aplicar.");
+                return;
+            }
+            setTopicoAplicado(true);
+            handlePontuacaoCategoria(topicoId);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        handlePontuacaoGeral();
+    }, [])
+
+    useEffect(() => {
+        handleCategorias();
+    }, [])
+
+    useEffect(() => {
+        if (categoriaId !== "") handleTopicosCategoria(categoriaId);
+    }, [categoriaId])
 
     return (
         <div className="flex flex-col mx-[15%] gap-4 p-4">
-            <FiltrosHome />
-            <div className="flex flex-col gap-4 justify-center items-center">
-                <div className="flex flex-row gap-6 items-center justify-center">
-                    <div
-                        className="relative flex flex-col items-center justify-between w-1/4 max-w-md
-                                    rounded-2xl p-7 border border-gray-400 
-                                    bg-gradient-to-b from-gray-200 via-gray-100 to-gray-50
-                                    text-gray-700 shadow-md">
-                        <FaTrophy className="text-gray-400 size-3/4" />
-                        <span className="mt-2 font-semibold text-center text-gray-800 text-lg">
-                            Ana Silva
-                        </span>
-                        <span className="mt-1 text-sm font-bold text-gray-700 bg-gray-100 p-1 rounded-lg">
-                            1900 XP
-                        </span>
-                    </div>
-                    <div className="relative flex flex-col items-center justify-between w-1/4 max-w-md
-                                rounded-2xl p-7 border border-yellow-300 bg-gradient-to-b from-yellow-50 
-                                via-yellow-50 to-yellow-100 shadow-md">
-                        <FaTrophy className="text-yellow-500 size-full" />
-                        <span className="mt-2 font-semibold text-center text-yellow-800 text-lg">Antonio Costa</span>
-                        <span className="mt-1 text-sm font-bold text-yellow-700 bg-yellow-100 p-1 rounded-lg">
-                            2000 XP
-                        </span>
-                    </div>
-                    <div
-                        className="relative flex flex-col items-center justify-between w-1/4 max-w-md
-                                    rounded-2xl p-7 border border-orange-800 
-                                    bg-gradient-to-b from-orange-300 via-orange-200 to-orange-100 
-                                    text-orange-900 shadow-md">
-                        <FaTrophy className="text-orange-700 size-1/2" />
-                        <span className="mt-2 font-semibold text-center text-orange-900 text-lg">
-                            Antonio Costa
-                        </span>
-                        <span className="mt-1 text-sm font-bold text-orange-800 bg-orange-100 p-1 rounded-lg">
-                            2000 XP
-                        </span>
-                    </div>
+            <ul id="tabs" className="flex flex-wrap text-sm font-medium text-center text-verdeSuave-500 border-b border-verdeSuave-200">
+                <li className="me-2">
+                    <button
+                        onClick={() => setActiveTab("geral")}
+                        className={`p-4 rounded-t-lg ${activeTab === "geral"
+                            ? "text-verdeSuave-800 bg-gradient-to-t from-verdeSuave-200 to-verdeSuave-50"
+                            : "hover:bg-gradient-to-t hover:from-verdeSuave-100 to-verdeSuave-50 text-verdeSuave-600"
+                            }`}
+                    >
+                        Pontuação Geral
+                    </button>
+                </li>
+                <li className="me-2">
+                    <button
+                        onClick={() => setActiveTab("categoria")}
+                        className={`p-4 rounded-t-lg ${activeTab === "categoria"
+                            ? "text-verdeSuave-800 bg-gradient-to-t from-verdeSuave-200 to-verdeSuave-50"
+                            : "hover:bg-gradient-to-t hover:from-verdeSuave-100 to-verdeSuave-50 text-verdeSuave-600"
+                            }`}
+                    >
+                        Pontuação por tópico
+                    </button>
+                </li>
+            </ul>
+            <div id="tab-contents">
+                {activeTab === "geral" && (
+                    loadingPontuacao
+                        ? (<div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        ) : (<div id="geral" className="flex flex-col gap-5">
+                            {pontuacaoGeral.length === 0
+                                ? <span className="rounded-lg p-4 text-center mt-5 text-gray-900 border border-red-400 ring-1 ring-red-200 bg-red-100">
+                                    Não existem ainda pontuações globais
+                                </span>
+                                : <PontuacaoList pontuacao={pontuacaoGeral} />
 
-                </div>
+                            }
+                        </div>
+                        )
+                )}
+                {activeTab === "categoria" && (
+                    loadingPontuacao
+                        ? (<div className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        ) : (<div id="categoria" className="flex flex-col justify-center gap-5">
+                            <FiltrosClass
+                                categorias={categorias}
+                                categoriaId={categoriaId}
+                                topicosCategoria={topicosCategoria}
+                                topicoId={topicoId}
+                                topicoDisabled={topicoDisabled}
+                                onChangeCategoria={onChangeCategoria}
+                                onChangeTopico={onChangeTopico}
+                                onApply={onApply}
+                            />
+                            {topicoAplicado === false
+                                ? <span className="rounded-lg p-4 text-center mt-5 text-gray-900 border border-blue-400 ring-1 ring-blue-200 bg-blue-100">
+                                    Selecione uma categoria e um tópico para ver as pontuações
+                                </span>
+                                : (pontuacaoCategoria.length === 0
+                                    ? <span className="rounded-lg p-4 text-center mt-5 text-gray-900 border border-red-400 ring-1 ring-red-200 bg-red-100">
+                                        Não existem ainda pontuações para o tópico selecionado
+                                    </span>
+                                    : <PontuacaoList pontuacao={pontuacaoCategoria} />
+                                )
+                            }
 
-                <div className="flex flex-col w-full gap-3">
-                    {frutas.map((fruta, index) => {
-                        let cor = '';
-                        cor = 'border-verdeSuave-300 bg-gradient-to-b from-verdeSuave-200 to-verdeSuave-50 text-orange-900 shadow-md';
-                        return (
-                            <div key={index} className={`flex flex-row items-center justify-between w-full py-3 px-5 
-                                                        rounded-xl border border-verdeSuave-200 bg-gradient-to-b 
-                                                        from-white to-verdeSuave-50 hover:from-verdeSuave-50 
-                                                        hover:to-white transition-all shadow-sm`}>
-                                <div className="flex flex-row items-center gap-6">
-                                    <span className="text-verdeSuave-700 font-bold text-lg w-6 text-right">{index + 4}</span>
-                                    <span className="font-medium text-gray-800 text-base">{fruta}</span>
-                                </div>
-                                <div className="text-sm font-semibold text-verdeSuave-700 bg-verdeSuave-100 px-3 py-1 rounded-lg">
-                                    1000 XP
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                        </div>
+                        )
+                )}
             </div>
-        </div>
+        </div >
     )
 }
 

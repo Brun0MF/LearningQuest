@@ -18,6 +18,8 @@ import CreateAccount from "./views/pages/login/createAccount"
 import NewPassword from "./views/pages/login/newPassword"
 import ConfirmEmail from "./views/pages/login/confirmEmail"
 
+import PrivateRoute from "./views/components/privateroute/privateRoute"
+
 
 function App() {
   return (
@@ -36,10 +38,12 @@ function App() {
 
         {/*CONTEUDO DA PAGINA */}
         <Route element={<BaseLayout />}>
-          <Route path='/jogos' element={<Home />}></Route>
-          <Route path='/jogos_niveis' element={<LevelMap />} />
-          <Route path='/classificacoes' element={<Classificacao />}></Route>
-          <Route path='/definicoes' element={<Definicoes />}></Route>
+          <Route element={<PrivateRoute />}>
+            <Route path='/jogos' element={<Home />}></Route>
+            <Route path='/jogos_niveis' element={<LevelMap />} />
+            <Route path='/classificacoes' element={<Classificacao />}></Route>
+            <Route path='/definicoes' element={<Definicoes />}></Route>
+          </Route>
         </Route>
         {/*CONTEUDO DA PAGINA */}
 
