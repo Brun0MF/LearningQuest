@@ -99,11 +99,15 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
 
         if not email_usuario:
             return Response({"error": "Email é obrigatório"}, status=400)
+        
+        try:
+            user = Utilizador.objects.get(email_utilizador=email_usuario)
+        except Utilizador.DoesNotExist:
+            return Response({"error": "Utilizador não encontrado!"}, status=404)
 
         codigo = random.randint(10000, 99999)
-        link_verificacao = f"http://localhost:5173/confirmemail?token={codigo}"
 
-        html_content = render_to_string('codigo_verificacao.html', {'link_verificacao': link_verificacao})
+        html_content = render_to_string('codigo_verificacao.html', {'codigo': codigo})
 
         email = EmailMessage(
             subject="Código de Verificação",
@@ -128,7 +132,7 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
         try:
             user = Utilizador.objects.get(email_utilizador=email)
         except Utilizador.DoesNotExist:
-            return Response({"error": "Utilizador não encontrado! Por favor tente mais tarde."})
+            return Response({"error": "Utilizador não encontrado! Por favor tente mais tarde."}, status=404)
         
         hashed_password = make_password(password)
         user.password_utilizador = hashed_password

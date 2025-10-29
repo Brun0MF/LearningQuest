@@ -53,7 +53,7 @@ export const register = async (nome, email, password) => {
 export const enviarCodigo = async (email) => {
     try {
         const response = await axios.post(`${url}codigo_email/`, {
-            email_utilizador: email
+            email: email
         });
 
         localStorage.setItem('email_user', email);

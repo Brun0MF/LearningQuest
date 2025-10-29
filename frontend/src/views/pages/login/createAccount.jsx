@@ -58,7 +58,7 @@ const CreateAccount = () => {
             </div>
             <div className="flex flex-col w-full mb-6">
                 <label htmlFor="" className="mb-2 text-sm font-medium text-gray-700">Password</label>
-                <input value={password} onChange={(e) => setPassword(e.target.value)} type="text" placeholder="******" className="px-4 py-2 border border-gray-300 rounded-lg focus:border-verdeSuave focus:ring-2 focus:ring-verdeSuave outline-none transition-all" required />
+                <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="******" className="px-4 py-2 border border-gray-300 rounded-lg focus:border-verdeSuave focus:ring-2 focus:ring-verdeSuave outline-none transition-all" required />
             </div>
             <button className="flex items-center justify-center bg-verdeSuave-600 text-white font-medium min-w-full px-4 py-2 rounded-lg mb-4 hover:bg-verdeSuave-700">
                 {loading ?

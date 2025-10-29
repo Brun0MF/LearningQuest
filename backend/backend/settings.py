@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,6 +53,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'id_utilizador', 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),   # Token de acesso dura 1 hora
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), 
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

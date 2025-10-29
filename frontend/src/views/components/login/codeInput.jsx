@@ -20,7 +20,7 @@ const CodigoInput = ({ onComplete }) => {
 
     const handleKeyDown = (e, index) => {
         if (e.key === "Backspace" && !e.target.value && index > 0) {
-            inputsRef.current[index - 1].focus(); 
+            inputsRef.current[index - 1].focus();
         }
     };
 

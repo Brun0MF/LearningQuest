@@ -1,19 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verificação de Email</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c5542, #3c6f52);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .content h2 {
+            color: #2c5542;
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555555;
+        }
+
+        .code-box {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 15px 25px;
+            background-color: #eaf3ec;
+            border: 2px dashed #2c5542;
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2c5542;
+            letter-spacing: 2px;
+        }
+
+        .footer {
+            background-color: #f4f6f8;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: #777777;
+        }
+
+        @media (max-width: 600px) {
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
 </head>
 
-<body style="font-family: Arial, sans-serif; text-align: center;">
-    <h2>Verificação de Identidade</h2>
-    <p>Clique no botão abaixo para confirmar seu email:</p>
-    <a href="{{ link_verificacao }}"
-        style="display: inline-block; padding: 12px 24px; background-color: #A9C7B3; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
-        Verificar Email
-    </a>
-    <p style="margin-top: 20px;">Se você não solicitou, ignore este email.</p>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Verificação de Identidade</h1>
+        </div>
+
+        <div class="content">
+            <h2>Olá 👋</h2>
+            <p>
+                Recebemos um pedido para confirmar o seu endereço de email.
+                Use o código abaixo para verificar sua conta:
+            </p>
+
+            <!-- Código destacado -->
+            <div class="code-box">{{ codigo }}</div>
+
+            <p style="margin-top: 20px; font-size: 14px; color: #888;">
+                Se você não solicitou este código, pode ignorar este email.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p>
+                Este é um email automático, por favor não responda.
+            </p>
+        </div>
+    </div>
 </body>
 
 </html>
