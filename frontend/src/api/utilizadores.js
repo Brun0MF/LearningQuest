@@ -46,3 +46,12 @@ export const register = async (nome, email, password) => {
         throw error;
     }
 };
+
+export const editarPerfil = async (nome, email, path, id_user) => {
+    const response = await axios.patch(`${url}${id_user}/editar/`, {
+        nome_utilizador: nome,
+        email_utilizador: email,
+        path_imagem: path,
+    });
+    return response.data;
+}

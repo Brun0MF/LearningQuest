@@ -136,6 +136,20 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
 
         return Response({'message': 'Senha alterada com sucesso!'}, status=200)
 
+    # EDITAR PERFIL
+    @action(detail=True, methods=['patch', 'put'], url_path='editar')
+    def editar(self, request, pk=None):
+        user = self.get_object()
+
+        # (opcional) blindar ainda mais no lado da view
+        allowed = {'nome_utilizador', 'email_utilizador', 'path_imagem'}
+        data = {k: v for k, v in request.data.items() if k in allowed}
+
+        from .serializers import UtilizadorEditSerializer
+        serializer = UtilizadorEditSerializer(user, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CategoriasViewSet(viewsets.ModelViewSet):
