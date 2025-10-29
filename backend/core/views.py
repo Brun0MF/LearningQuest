@@ -78,7 +78,7 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
             email_utilizador=email,
             password_utilizador=hashed_password,
             pontuacaogeral_utilizador=0,
-            path_imagem="/gua1.png"
+            path_imagem="gua1.png"
         )
 
         refresh = RefreshToken.for_user(user)
