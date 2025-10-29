@@ -34,7 +34,7 @@ const CardHome = ({ topicos = [] }) => {
                 <h1 className="font-semibold text-2xl">{topicos.titulo_topico}</h1>
                 <div className="flex flex-col items-center justify-center">
                     <img src='/astronauta_0.png' width={50} alt="" className="-mb-4" />
-                    <Link to={'/jogos_niveis'} className="bg-verdeSuave-600 font-medium text-white py-2 px-5 rounded-xl hover:bg-verdeSuave-700">
+                    <Link to={`/jogos_niveis/${id_topico}`} className="bg-verdeSuave-600 font-medium text-white py-2 px-5 rounded-xl hover:bg-verdeSuave-700">
                         Jogar
                     </Link>
                 </div>

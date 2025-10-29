@@ -17,7 +17,7 @@ export default function Footer() {
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Learning Quest</h2>
                             <ul className="text-gray-500 font-medium">
                                 <li className="mb-4">
-                                    <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Jogos</Link>
+                                    <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Home</Link>
                                 </li>
                                 <li className="mb-4">
                                     <Link to="/classificacoes" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Classificações</Link>
