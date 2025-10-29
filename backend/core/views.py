@@ -20,6 +20,7 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
     queryset = Utilizador.objects.all()
     serializer_class = UtilizadorSerializer
 
+    # RANKING GERAL
     @action(detail=False, methods=["get"], url_path="pontuacao")
     def pontuacaogeral_utilizador(self, request):
         qs = (
@@ -28,7 +29,7 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
         )
         ser = self.get_serializer(qs, many=True)
         return Response(ser.data, status=status.HTTP_200_OK)
-    
+
     # LOGIN
     @action(detail=False, methods=['post'], url_path='login')
     def login(self, request):
@@ -102,6 +103,17 @@ class CategoriasViewSet(viewsets.ModelViewSet):
 class TopicosViewSet(viewsets.ModelViewSet):
     queryset = Topicos.objects.all()
     serializer_class = TopicosSerializer
+
+    # RANKING TOPICO
+    @action(detail=True, methods=["get"], url_path="ranking")
+    def getRanking_topico(self, request, pk=None) :
+        qs = (Pontuacao.objects.filter(id_topico_id=pk).select_related('id_utilizador').order_by('-pontos', 'id_utilizador__nome_utilizador'))
+        data = [{
+            'id_utilizador':p.id_utilizador.id_utilizador,
+            'nome_utilizador':p.id_utilizador.nome_utilizador,
+            'pontos':p.pontos,
+        } for p in qs]
+        return Response(data, status=status.HTTP_200_OK)
 
 class PontuacaoViewSet(viewsets.ModelViewSet):
     queryset = Pontuacao.objects.all()
