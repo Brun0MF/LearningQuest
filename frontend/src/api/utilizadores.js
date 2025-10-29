@@ -21,7 +21,7 @@ export const login = async (email, password) => {
 
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
-        localStorage.setItem('id_user', response.data.id_utilizador);
+        localStorage.setItem('id_user', response.data.user.id_utilizador);
 
         return response.data;
     } catch (error) {
@@ -40,7 +40,7 @@ export const register = async (nome, email, password) => {
 
         localStorage.setItem('access', response.data.access);
         localStorage.setItem('refresh', response.data.refresh);
-        localStorage.setItem('id_user', response.data.id_utilizador);
+        localStorage.setItem('id_user', response.data.user.id_utilizador);
 
 
         return response.data;
