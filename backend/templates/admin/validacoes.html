@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>{{ titulo }}</h1>
+
+{% if utilizadores_nao_validados %}
+<ul>
+    {% for u in utilizadores_nao_validados %}
+    <li>{{ u.nome_utilizador }} — {{ u.email_utilizador }} — Pontuação: {{ u.pontuacaogeral_utilizador }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nenhum utilizador pendente.</p>
+{% endif %}
+{% endblock %}

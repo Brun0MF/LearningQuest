@@ -1,10 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import QuizPopUp from "../../components/quiz/popup";
+import { getPontuacao_user_topico } from "../../../api/pontuacao";
+import { useParams } from "react-router-dom";
 
 const LevelPath = () => {
   const levels = Array.from({ length: 10 }, (_, i) => i + 1);
-  const [score, setScore] = useState(5); // pontuação
-  const [hoveredLevel, setHoveredLevel] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [userId, setUserId] = useState(() => {
+    const raw = localStorage.getItem("id_user");
+    const parsed =
+      raw && raw !== "null" && raw !== "undefined" ? parseInt(raw, 10) : NaN;
+    return Number.isNaN(parsed) ? null : parsed;
+  });
+  const [pontuacao, setPontuacao] = useState([]);
+  const closeModal = () => setIsOpen(false);
+  const { id_topico } = useParams();
+  const [incrementa, setIncrementa] = useState(false);
+
+  const pontos = pontuacao?.pontos ?? 0;
+  const nivelAtual = Math.min(10, Math.max(1, Math.ceil(pontos / 10)));
+  const baseDoNivel = (nivelAtual - 1) * 10;
+  const progresso = ((pontos - baseDoNivel) / 10) * 100;
 
   const getHorizontalOffset = (index) => {
     const maxOffset = 200;
@@ -13,6 +29,36 @@ const LevelPath = () => {
   };
 
   const headerHeight = 80;
+
+  const handlePontuacaoUserTopico = async (id_user, id_topico) => {
+    try {
+      const response = await getPontuacao_user_topico(id_user, id_topico);
+      setPontuacao(response.data);
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const handleFim = () => {
+    try {
+
+      closeModal();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const handlePontuacaoChange = (delta) => {
+    setPontuacao((prev) => ({
+      ...prev,
+      pontos: Math.max(0, (prev.pontos ?? 0) + delta),
+    }));
+  };
+
+  useEffect(() => {
+    if (userId && id_topico) handlePontuacaoUserTopico(userId, Number(id_topico))
+  }, [userId, id_topico])
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
@@ -79,25 +125,14 @@ const LevelPath = () => {
 
       <style>
         {`
-          @keyframes floatUpDown {
-            0% {
-              transform: translateX(var(--offset-x)) translateY(0);
-            }
-            50% {
-              transform: translateX(var(--offset-x)) translateY(-15px);
-            }
-            100% {
-              transform: translateX(var(--offset-x)) translateY(0);
-            }
+          @keyframes floatUpDownKeepX {
+            0%   { transform: translateX(var(--offset-x)) translateY(0); }
+            50%  { transform: translateX(var(--offset-x)) translateY(-15px); }
+            100% { transform: translateX(var(--offset-x)) translateY(0); }
           }
-          
           @keyframes driftCloud {
-            0% {
-              transform: translateX(-100px);
-            }
-            100% {
-              transform: translateX(100vw);
-            }
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(100vw); }
           }
         `}
       </style>
@@ -115,6 +150,20 @@ const LevelPath = () => {
           background: "transparent",
         }}
       >
+        {/* PONTUACAO */}
+        <div className="flex flex-col -mt-10 bg-verdeSuave-100 rounded-lg p-3 w-2/3 gap-2 border border-verdeSuave-200">
+          <div className="flex flex-row justify-between">
+            <span>Level {nivelAtual}</span>
+            <span className="p-1">{pontuacao.pontos} XP</span>
+          </div>
+          <div className="w-full border border-verdeSuave-400 rounded-lg h-3">
+            <div
+              className="h-full bg-verdeSuave-400 transition-all duration-500"
+              style={{ width: `${progresso}%` }}
+            ></div>
+          </div>
+
+        </div>
         {levels.map((lvl, index) => {
           const offsetX = getHorizontalOffset(index);
 
@@ -130,7 +179,33 @@ const LevelPath = () => {
               }}
             >
               {/* Ilha flutuante */}
-              <Link to={`/nivel/${lvl}`}>
+              <button
+                onClick={() => {
+                  setIsOpen(true);
+                  if (lvl === nivelAtual) {
+                    setIncrementa(true);
+                  } else {
+                    setIncrementa(false);
+                  }
+                }}
+                disabled={lvl > nivelAtual}
+                style={{
+                  "--offset-x": `${offsetX}px`,
+                  transform: `translateX(var(--offset-x))`,
+                  transition: "transform 0.3s ease",
+                  background: "transparent",
+                  border: "none",
+                  cursor: lvl > nivelAtual ? "not-allowed" : "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  if (lvl <= nivelAtual) {
+                    e.currentTarget.style.animation = "floatUpDownKeepX 1.5s ease-in-out infinite";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.animation = "none";
+                }}
+              >
                 <img
                   src="/flutua.png"
                   alt={`Ilha ${lvl}`}
@@ -138,21 +213,22 @@ const LevelPath = () => {
                     width: "180px",
                     height: "auto",
                     objectFit: "contain",
-                    cursor: "pointer",
-                    "--offset-x": `${offsetX}px`,
-                    transform: `translateX(${offsetX}px)`,
-                    transition: "transform 0.3s ease",
+                    filter: lvl > nivelAtual ? "grayscale(100%) brightness(0.8)" : "none",
+                    opacity: lvl > nivelAtual ? 0.7 : 1,
+                    pointerEvents: "none",
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.animation = `floatUpDown 1.5s ease-in-out infinite`)
-                  }
-                  onMouseLeave={(e) => (e.currentTarget.style.animation = "none")}
                 />
-              </Link>
+              </button>
 
+              {isOpen && (
+                <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full relative animate-fadeIn">
+                    <QuizPopUp onTerminar={handleFim} incrementa={incrementa} pontos={pontuacao.pontos} onPontuacaoChange={handlePontuacaoChange} />
+                  </div>
+                </div>
+              )}
               {/* Imagem do nível sempre à frente */}
-              <img
-                src={`/nivel/${lvl}.png`}
+              <img src={`/nivel/${lvl}.png`}
                 alt={`Pré-visualização do nível ${lvl}`}
                 style={{
                   position: "absolute",
@@ -164,6 +240,12 @@ const LevelPath = () => {
                   borderRadius: "10px",
                   zIndex: 2,
                   pointerEvents: "none",
+                  transition: "filter 0.3s ease",
+                  filter:
+                    lvl < nivelAtual
+                      ? "sepia(1) saturate(3) hue-rotate(40deg) brightness(1.25) contrast(1.1)"
+                      : "none",
+
                 }}
               />
             </div>

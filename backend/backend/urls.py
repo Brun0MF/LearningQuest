@@ -1,6 +1,8 @@
 # backend/urls.py (urls do projeto)
 from django.contrib import admin
 from django.urls import path, include
+from core.admin import meu_admin_site
+from django.shortcuts import redirect
 from rest_framework.routers import DefaultRouter
 from core.views import (
     UtilizadorViewSet, CategoriasViewSet, TopicosViewSet,
@@ -16,6 +18,7 @@ router.register(r'niveis', NiveisViewSet, basename='niveis')
 router.register(r'perguntas', PerguntasViewSet, basename='perguntas')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', lambda request: redirect('api/', permanent=False)),
+    path('admin/', meu_admin_site.urls),
     path('api/', include(router.urls)),
 ]

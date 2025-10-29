@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 
-const QuizPopUp = () => {
+const QuizPopUp = ({onTerminar, incrementa = false, pontos = "", onPontuacaoChange}) => {
   const quizQuestions = [
     {
       pergunta:
@@ -26,16 +27,23 @@ const QuizPopUp = () => {
   ];
 
   const [current, setCurrent] = useState(0);
-  const [selected, setSelected] = useState(null); // índice escolhido
-  const [validated, setValidated] = useState(false); // já validou?
-  const [score, setScore] = useState(0); // pontuação opcional
+  const [selected, setSelected] = useState(null);
+  const [validated, setValidated] = useState(false); 
+  const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
 
   const question = quizQuestions[current];
 
   const handleValidate = () => {
     if (selected === null) return;
-    if (selected === question.correta) setScore((s) => s + 1);
+    if(incrementa) {
+      if (selected === question.correta) {
+        onPontuacaoChange(2);
+      } else {
+        onPontuacaoChange(-2);
+      }  
+    }
+    
     setValidated(true);
   };
 
@@ -75,9 +83,14 @@ const QuizPopUp = () => {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5">
+      {incrementa === false &&
+        <span className="flex flex-row items-center justify-center gap-2 rounded-lg py-1 px-3 text-center mt-5 text-sm text-gray-800 border border-blue-400 ring-1 ring-blue-200 bg-blue-100">
+          <AiOutlineExclamationCircle className="text-blue-500" /> Nível ultrapassado! Este questionário não vai alterar o seu xp atual.
+        </span>
+      }
       <h2 className="text-lg font-semibold">{question.pergunta}</h2>
-
+      {pontos}
       <div className="flex flex-col gap-2">
         {question.opcoes.map((opcao, index) => {
           const isSelected = selected === index;
@@ -129,9 +142,12 @@ const QuizPopUp = () => {
             onClick={handleNext}
             className="rounded-xl px-3 py-2 text-white font-medium bg-verdeSuave-600 hover:bg-verdeSuave-700"
           >
-            {current < quizQuestions.length - 1 ? "Próxima" : "Terminar"}
+            Próxima
           </button>
         )}
+        <button onClick={onTerminar} className="rounded-xl px-3 py-2 text-white font-medium bg-red-600 hover:bg-red-700">
+          Terminar
+        </button>
       </div>
     </div>
   );

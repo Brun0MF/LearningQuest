@@ -38,8 +38,8 @@ const othersItems: NavItem[] = [
     },
     {
         icon: <VscSignOut />,
-        name: "Sign Out",
-        path: "/login",
+        name: "Sair",
+        path: "/",
     },
 ];
 
@@ -82,8 +82,9 @@ const AppSidebar: React.FC = () => {
         });
 
         if (!submenuMatched) {
-            setOpenSubmenu(null);
+            setOpenSubmenu(null); // só fecha se nenhum submenu estiver ativo
         }
+
     }, [location, isActive]);
 
     useEffect(() => {
@@ -113,57 +114,28 @@ const AppSidebar: React.FC = () => {
 
     const renderMenuItems = (items: NavItem[], menuType: "main" | "rankings" | "others") => (
         <ul className="flex flex-col gap-4">
-            {items.map((nav, index) => (
-                <li key={nav.name}>
-                    {nav.subItems ? (
-                        <button
-                            onClick={() => handleSubmenuToggle(index, menuType)}
-                            className={`menu-item group flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 rounded-md px-2 py-1 ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                                ? "menu-item-active"
-                                : "menu-item-inactive"
-                                } cursor-pointer ${!isExpanded && !isHovered
-                                    ? "lg:justify-center"
-                                    : "lg:justify-start"
-                                }`}
-                        >
-                            <span
-                                className={`menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl ${!isExpanded && !isHovered ? 'lg:mx-auto' : ''} ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                                    ? "menu-item-icon-active"
-                                    : "menu-item-icon-inactive"
-                                    } group-hover:text-brand-500 transition-colors duration-150`}
-                            >
-                                {nav.icon}
-                            </span>
-                            {(isExpanded || isHovered || isMobileOpen) && (
-                                <span className="menu-item-text group-hover:text-brand-500 transition-colors duration-150">{nav.name}</span>
-                            )}
-                            {(isExpanded || isHovered || isMobileOpen) && (
-                                <IoIosArrowDown
-                                    className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu?.type === menuType &&
-                                        openSubmenu?.index === index
-                                        ? "rotate-180 text-brand-500"
-                                        : ""
-                                        } group-hover:text-brand-500`}
-                                />
-                            )}
-                        </button>
-                    ) : (
-                        nav.path && (
-                            <Link
-                                to={nav.path}
-                                className={`menu-item group flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-gray-200 transition-colors duration-150 rounded-md px-2 py-1 ${nav.name === "Sign Out"
-                                    ? "text-red-500 hover:text-red-600"
-                                    : isActive(nav.path)
-                                        ? "menu-item-active"
-                                        : "menu-item-inactive"
+            {items.map((nav, index) => {
+                const isNavActive = nav.path
+                    ? isActive(nav.path)
+                    : (nav.subItems ? nav.subItems.some((s) => isActive(s.path)) : false);
+
+                return (
+                    <li key={nav.name}>
+                        {nav.subItems ? (
+                            <button
+                                onClick={() => handleSubmenuToggle(index, menuType)}
+                                className={`menu-item group flex items-center gap-3 hover:bg-gray-100  transition-colors duration-150 rounded-md px-2 py-1 ${openSubmenu?.type === menuType && openSubmenu?.index === index
+                                    ? "menu-item-active"
+                                    : "menu-item-inactive"
+                                    } ${isNavActive ? 'bg-gray-200' : ''} cursor-pointer ${!isExpanded && !isHovered
+                                        ? "lg:justify-center"
+                                        : "lg:justify-start"
                                     }`}
                             >
                                 <span
-                                    className={`menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl ${!isExpanded && !isHovered ? 'lg:mx-auto' : ''} ${nav.name === "Sign Out"
-                                        ? "text-red-500"
-                                        : isActive(nav.path)
-                                            ? "menu-item-icon-active"
-                                            : "menu-item-icon-inactive"
+                                    className={`menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl ${!isExpanded && !isHovered ? 'lg:mx-auto' : ''} ${openSubmenu?.type === menuType && openSubmenu?.index === index
+                                        ? "menu-item-icon-active"
+                                        : "menu-item-icon-inactive"
                                         } group-hover:text-brand-500 transition-colors duration-150`}
                                 >
                                     {nav.icon}
@@ -171,63 +143,98 @@ const AppSidebar: React.FC = () => {
                                 {(isExpanded || isHovered || isMobileOpen) && (
                                     <span className="menu-item-text group-hover:text-brand-500 transition-colors duration-150">{nav.name}</span>
                                 )}
-                            </Link>
-                        )
-                    )}
-                    {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
-                        <div
-                            ref={(el) => {
-                                subMenuRefs.current[`${menuType}-${index}`] = el;
-                            }}
-                            className="overflow-hidden transition-all duration-300"
-                            style={{
-                                height:
-                                    openSubmenu?.type === menuType && openSubmenu?.index === index
-                                        ? `${subMenuHeight[`${menuType}-${index}`]}px`
-                                        : "0px",
-                            }}
-                        >
-                            <ul className="mt-2 space-y-1 ml-9">
-                                {nav.subItems.map((subItem) => (
-                                    <li key={subItem.name}>
-                                        <Link
-                                            to={subItem.path}
-                                            className={`menu-dropdown-item ${isActive(subItem.path)
-                                                ? "menu-dropdown-item-active"
-                                                : "menu-dropdown-item-inactive"
-                                                }`}
-                                        >
-                                            {subItem.name}
-                                            <span className="flex items-center gap-1 ml-auto">
-                                                {subItem.new && (
-                                                    <span
-                                                        className={`ml-auto ${isActive(subItem.path)
-                                                            ? "menu-dropdown-badge-active"
-                                                            : "menu-dropdown-badge-inactive"
-                                                            } menu-dropdown-badge`}
-                                                    >
-                                                        new
-                                                    </span>
-                                                )}
-                                                {subItem.pro && (
-                                                    <span
-                                                        className={`ml-auto ${isActive(subItem.path)
-                                                            ? "menu-dropdown-badge-active"
-                                                            : "menu-dropdown-badge-inactive"
-                                                            } menu-dropdown-badge`}
-                                                    >
-                                                        pro
-                                                    </span>
-                                                )}
-                                            </span>
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                </li>
-            ))}
+                                {(isExpanded || isHovered || isMobileOpen) && (
+                                    <IoIosArrowDown
+                                        className={`ml-auto w-5 h-5 transition-transform duration-200 ${openSubmenu?.type === menuType &&
+                                            openSubmenu?.index === index
+                                            ? "rotate-180 text-brand-500"
+                                            : ""
+                                            } group-hover:text-brand-500`}
+                                    />
+                                )}
+                            </button>
+                        ) : (
+                            nav.path && (
+                                <Link
+                                    to={nav.path}
+                                    className={`menu-item group flex items-center gap-3 hover:bg-gray-100  transition-colors duration-150 rounded-md px-2 py-1 ${nav.name === "Sair"
+                                        ? "text-red-500 hover:text-red-600"
+                                        : isActive(nav.path)
+                                            ? "menu-item-active bg-gray-200"
+                                            : "menu-item-inactive"
+                                        }`}
+                                >
+                                    <span
+                                        className={`menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl ${!isExpanded && !isHovered ? 'lg:mx-auto' : ''} ${nav.name === "Sair"
+                                            ? "text-red-500"
+                                            : isActive(nav.path)
+                                                ? "menu-item-icon-active"
+                                                : "menu-item-icon-inactive"
+                                            } group-hover:text-brand-500 transition-colors duration-150`}
+                                    >
+                                        {nav.icon}
+                                    </span>
+                                    {(isExpanded || isHovered || isMobileOpen) && (
+                                        <span className="menu-item-text group-hover:text-brand-500 transition-colors duration-150">{nav.name}</span>
+                                    )}
+                                </Link>
+                            )
+                        )}
+                        {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
+                            <div
+                                ref={(el) => {
+                                    subMenuRefs.current[`${menuType}-${index}`] = el;
+                                }}
+                                className="overflow-hidden transition-all duration-300"
+                                style={{
+                                    height:
+                                        openSubmenu?.type === menuType && openSubmenu?.index === index
+                                            ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                                            : "0px",
+                                }}
+                            >
+                                <ul className="mt-2 space-y-1 ml-9">
+                                    {nav.subItems.map((subItem) => (
+                                        <li key={subItem.name}>
+                                            <Link
+                                                to={subItem.path}
+                                                className={`menu-dropdown-item block px-2 py-1 rounded-md transition-colors duration-150 ${isActive(subItem.path)
+                                                    ? "menu-dropdown-item-active bg-gray-100  text-brand-600"
+                                                    : "menu-dropdown-item-inactive hover:bg-gray-50 "
+                                                    }`}
+                                            >
+                                                {subItem.name}
+                                                <span className="flex items-center gap-1 ml-auto">
+                                                    {subItem.new && (
+                                                        <span
+                                                            className={`ml-auto ${isActive(subItem.path)
+                                                                ? "menu-dropdown-badge-active"
+                                                                : "menu-dropdown-badge-inactive"
+                                                                } menu-dropdown-badge`}
+                                                        >
+                                                            new
+                                                        </span>
+                                                    )}
+                                                    {subItem.pro && (
+                                                        <span
+                                                            className={`ml-auto ${isActive(subItem.path)
+                                                                ? "menu-dropdown-badge-active"
+                                                                : "menu-dropdown-badge-inactive"
+                                                                } menu-dropdown-badge`}
+                                                        >
+                                                            pro
+                                                        </span>
+                                                    )}
+                                                </span>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                    </li>
+                );
+            })}
         </ul>
     );
 

@@ -20,7 +20,7 @@ class Categorias(models.Model):
     titulo_categoria = models.CharField(max_length=200)
 
     class Meta:
-        managed = False
+       
         db_table = 'categorias'
 
 
@@ -34,7 +34,6 @@ class Niveis(models.Model):
         managed = False
         db_table = 'niveis'
 
-
 class Pontuacao(models.Model):
     pk = models.CompositePrimaryKey('id_utilizador', 'id_topico')
     id_utilizador = models.ForeignKey('Utilizador', models.DO_NOTHING, db_column='id_utilizador')
@@ -42,7 +41,7 @@ class Pontuacao(models.Model):
     pontos = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+       
         db_table = 'pontuacao'
 
 
@@ -53,7 +52,7 @@ class Topicos(models.Model):
     id_categoria = models.ForeignKey(Categorias, models.DO_NOTHING, db_column='id_categoria')
 
     class Meta:
-        managed = False
+       
         db_table = 'topicos'
 
 
@@ -66,5 +65,5 @@ class Utilizador(models.Model):
     path_imagem = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
+       
         db_table = 'utilizador'

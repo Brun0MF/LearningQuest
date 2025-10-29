@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { mudarPassword as apiMudarPassword } from "../../../api/utilizadores";
+import { mudarPassword } from "../../../api/utilizadores";
 import Swal from 'sweetalert2'
 
 const NewPassword = () => {
@@ -26,7 +26,7 @@ const NewPassword = () => {
         setLoading(true);
 
         try {
-            const data = await apiMudarPassword(password, repPassword);
+            const data = await mudarPassword(password);
             console.log("Password alterada com sucesso:", data);
             setPassword("");
             setRepPassword("");
