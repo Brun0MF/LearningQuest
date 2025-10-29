@@ -8,12 +8,11 @@ const PontuacaoList = ({ pontuacao = [] }) => {
     const restantes = pontuacao.slice(3);
 
     const getNome = (u) =>
-        u?.nome_utilizador ?? u?.Nome_Utilizador ?? u?.nome ?? u?.Nome ?? "—";
+        u?.nome_utilizador ?? u?.Nome_Utilizador ?? "—";
     const getPontos = (u) =>
-        u?.total_pontos ??
         u?.pontuacaogeral_utilizador ??
         u?.PontuacaoGeral_Utilizador ??
-        u?.xp ??
+        u?.pontos ??
         0;
 
     const stylesByPlace = {
