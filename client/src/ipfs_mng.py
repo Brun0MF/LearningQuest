@@ -100,6 +100,32 @@ def ipfs_get_json(cid):
         return None
 
 
+def ipfs_get_address():
+    try:
+        res = requests.post(f"{IPFS_API}/id", timeout=10)
+        res.raise_for_status()
+        info = res.json()
+        peer_id = info.get("ID")
+        addresses = info.get("Addresses", [])
+        logs_mng.print_success("IPFS", f"Node ID: {peer_id}")
+        for addr in addresses:
+            logs_mng.print_info("IPFS", f"Address: {addr}")
+        return {"id": peer_id, "addresses": addresses}
+    except Exception as e:
+        logs_mng.print_error("IPFS", f"Failed to get node address: {e}")
+        return None
+
+
+def ipfs_connect(address):
+    try:
+        res = requests.post(f"{IPFS_API}/swarm/connect", params={"arg": address}, timeout=10)
+        res.raise_for_status()
+        result = res.json()
+        logs_mng.print_success("IPFS", f"Connected to {address}")
+        return result
+    except Exception as e:
+        logs_mng.print_error("IPFS", f"Failed to connect to {address}: {e}")
+        return None
 
 def init():
     check_ipfs_installed()
