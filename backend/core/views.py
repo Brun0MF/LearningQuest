@@ -241,6 +241,10 @@ class PerguntasViewSet(viewsets.ModelViewSet):
             in_nivel = request.query_params.get('nivel')
             in_linguagem = request.query_params.get('linguagem')
             
+            if((in_topico is None) or (in_nivel is None) or (in_linguagem is None)):
+                return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+
+
             try:
                 topico = Topicos.objects.get(id_topico=in_topico)
                 topico_titulo = topico.titulo_topico
@@ -273,15 +277,41 @@ class PerguntasViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_path="get_question")
     def get_question(self, request, pk=None):
+        in_pergunta = request.query_params.get('pergunta')
+        if(in_pergunta is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            pergunta = Perguntas.objects.get(id_pergunta=in_pergunta)
+            pergunta_cid = pergunta.cid
+            urlp = f"{url}get_question?cid={pergunta_cid}"
+            response = requests.get(urlp, timeout=300)
+            response.raise_for_status()
+            ai_json = response.json()
+        except Perguntas.DoesNotExist:
+                return Response(
+                    {"error": f"Pergunta com ID {in_pergunta} não existe."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        return Response(ai_json, status=status.HTTP_200_OK)
 
-        return Response({}, status=status.HTTP_200_OK)
+
 
     @action(detail=True, methods=["post"], url_path="ipfs_connect")
     def ipfs_connect(self, request, pk=None):
+        in_endereco = request.query_params.get('endereco')
+        if(in_endereco is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        urlp = f"{url}connect?address={in_endereco}"
+        response = requests.post(urlp, timeout=300)
+        response.raise_for_status()
+        ai_json = response.json()
+        return Response(ai_json, status=status.HTTP_200_OK)
 
-        return Response({}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["get"], url_path="ipfs_address")
     def ipfs_address(self, request, pk=None):
-
-        return Response({}, status=status.HTTP_200_OK)
+        urlp = f"{url}address"
+        response = requests.get(urlp, timeout=300)
+        response.raise_for_status()
+        ai_json = response.json()
+        return Response(ai_json, status=status.HTTP_200_OK)
