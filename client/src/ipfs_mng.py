@@ -7,8 +7,16 @@ import requests
 import os
 import json
 
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    else:
+        return os.path.join(os.path.abspath("."), relative_path)
+
+
+
 IPFS_API = "http://127.0.0.1:5001/api/v0"
-IPFS_BIN = "ipfs.exe" if platform.system().lower() == "windows" else "ipfs"
+IPFS_BIN = resource_path("ipfs.exe") if platform.system().lower() == "windows" else "ipfs"
 
 def check_ipfs_installed():
     if not os.path.exists(IPFS_BIN):
