@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { editarPerfil } from "../../../api/utilizadores";
 
 export default function UserMetaCard() {
     const profileImages = [
@@ -18,10 +19,14 @@ export default function UserMetaCard() {
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
-    const handleSave = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log("Saving changes...");
-        closeModal();
+    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+        try {
+            e.preventDefault();
+            editarPerfil();
+            closeModal();
+        } catch(error) {
+            console.log('Erro ao editar perfil: ' + error);
+        }
     };
 
 
