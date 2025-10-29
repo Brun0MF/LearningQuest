@@ -221,6 +221,58 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
             },
             status=status.HTTP_200_OK,
         )
+    
+    # Atualizar ou criar pontuação
+    @action(detail=False, methods=["post"], url_path="update-user-topic")
+    def update_user_topic(self, request):
+        uid = request.data.get("id_utilizador")
+        tid = request.data.get("id_topico")
+        pontos = request.data.get("pontos")
+
+        if not uid or not tid or pontos is None:
+            return Response(
+                {"error": "Parâmetros obrigatórios: id_utilizador, id_topico e pontos"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            uid = int(uid)
+            tid = int(tid)
+            pontos = int(pontos)
+        except ValueError:
+            return Response(
+                {"error": "id_utilizador, id_topico e pontos devem ser números inteiros"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        pontuacao_obj, created = Pontuacao.objects.get_or_create(
+            id_utilizador_id=uid, id_topico_id=tid,
+            defaults={"pontos": pontos}
+        )
+
+        if not created:
+            pontuacao_obj.pontos += pontos
+            pontuacao_obj.save()
+
+        total = (
+            Pontuacao.objects
+            .filter(id_utilizador_id=uid, id_topico_id=tid)
+            .aggregate(total=Coalesce(Sum("pontos"), 0))
+            ["total"]
+        )
+
+        return Response(
+            {
+                "id_utilizador": uid,
+                "id_topico": tid,
+                "pontos_adicionados": pontos,
+                "pontos_totais": total,
+                "mensagem": "Pontuação atualizada com sucesso"
+                if not created
+                else "Pontuação criada com sucesso",
+            },
+            status=status.HTTP_200_OK,
+        )
 
 class NiveisViewSet(viewsets.ModelViewSet):
     queryset = Niveis.objects.all()
