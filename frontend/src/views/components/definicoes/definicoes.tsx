@@ -34,16 +34,35 @@ export default function UserMetaCard() {
         }
     }
 
-    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-        try {
-            e.preventDefault();
-            const response = await editarPerfil(name, email, '', userId);
-            closeModal();
-            //await handleUser(userId);
-        } catch (error) {
-            console.log('Erro ao editar perfil: ' + error);
-        }
-    };
+// definicoes.tsx
+const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  try {
+    if (userId == null) {
+      console.error("ID do utilizador inexistente");
+      return;
+    }
+
+    await editarPerfil(name, email, selectedImage || null, userId);
+
+    // Atualiza o estado local imediatamente (UX mais fluida)
+    setUtilizador((prev: any) =>
+      prev
+        ? {
+            ...prev,
+            nome_utilizador: name,
+            email_utilizador: email,
+            path_imagem: selectedImage || prev.path_imagem,
+          }
+        : prev
+    );
+
+    closeModal();
+  } catch (error) {
+    console.log("Erro ao editar perfil: " + error);
+  }
+};
+
 
     useEffect(() => {
         const raw = localStorage.getItem("id_user");

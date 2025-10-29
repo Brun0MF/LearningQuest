@@ -85,13 +85,14 @@ export const mudarPassword = async (password) => {
 };
 
 export const editarPerfil = async (nome, email, path, id_user) => {
-    const response = await axios.patch(`${url}${id_user}/editar/`, {
-        nome_utilizador: nome,
-        email_utilizador: email,
-        path_imagem: path,
-    });
-    return response.data;
-}
+  const payload = {};
+  if (nome && nome.trim() !== "") payload.nome_utilizador = nome.trim();
+  if (email && email.trim() !== "") payload.email_utilizador = email.trim();
+  if (path && path.trim() !== "") payload.path_imagem = path.trim();
+
+  const { data } = await axios.patch(`${url}${id_user}/editar/`, payload);
+  return data;
+};
 
 export const getUtilizadorbyID = async (id_user) => {
     const response = await axios.get(`${url}${id_user}/`);
