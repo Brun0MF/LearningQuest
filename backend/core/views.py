@@ -9,13 +9,15 @@ from rest_framework import viewsets
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 
+import requests
+
 from django.db.models import Sum, IntegerField
 from django.db.models.functions import Coalesce
 
-from .models import Utilizador, Categorias, Topicos, Pontuacao, Percursos
+from .models import Utilizador, Categorias, Topicos, Pontuacao, Niveis, Perguntas
 from .serializers import (
     UtilizadorSerializer, CategoriasSerializer, TopicosSerializer,
-    PontuacaoSerializer, PercursosSerializer
+    PontuacaoSerializer, NiveisSerializer, PerguntasSerializer
 )
 
 # --- VIEWSETS NORMAIS ---
@@ -183,6 +185,56 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
     queryset = Pontuacao.objects.all()
     serializer_class = PontuacaoSerializer
 
-class PercursosViewSet(viewsets.ModelViewSet):
-    queryset = Percursos.objects.all()
-    serializer_class = PercursosSerializer
+class NiveisViewSet(viewsets.ModelViewSet):
+    queryset = Niveis.objects.all()
+    serializer_class = NiveisSerializer
+
+    
+class PerguntasViewSet(viewseits.ModelViewSet):
+    queryset = Perguntas.objects.all()
+    serializer_class = PerguntasSerializer
+
+    url = "http://127.0.0.1:5000/"
+
+
+    @action(detail=True, methods=["get"], url_path="generate_question")
+    def generate_question(self, request, pk=None):
+        try:
+            in_topico = request.query_params.get('topico')
+            in_nivel = request.query_params.get('nivel')
+            in_linguagem = request.query_params.get('linguagem')
+
+            topico = Topicos.objects.get(id_topico=in_topico)
+            topico_titulo = topico.titulo_topico
+            nivel = Niveis.objects.get(id_nivel=in_nivel)
+            nivel_titulo = nivel.titulo_nivel
+
+            urlp = f"{url}generate_question?topic={topico_titulo}&content={nivel_titulo}&lang={in_linguagem}"
+            response = requests.get(urlp, timeout=300)
+            response.raise_for_status()
+            ai_json = response.json()
+            data = {"id_topic":in_topico,"materia":in_materia,"linguagem":in_linguagem,"cid":ai_json.get("cid"),"aprovado":False}
+            serializer = self.get_serializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+            return Response({"STATUS":"HTTP_200_OK","CID":""}, status=status.HTTP_200_OK)
+        except requests.exceptions.RequestException as e:    
+            return Response({"STATUS":"HTTP_500_INTERNAL_SERVER_ERROR"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+    @action(detail=True, methods=["get"], url_path="get_question")
+    def get_question(self, request, pk=None):
+
+        return Response({}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"], url_path="ipfs_connect")
+    def ipfs_connect(self, request, pk=None):
+
+        return Response({}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["get"], url_path="ipfs_address")
+    def ipfs_address(self, request, pk=None):
+
+        return Response({}, status=status.HTTP_200_OK)
+
