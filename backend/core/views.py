@@ -1,10 +1,13 @@
 # core/views.py
-from rest_framework.views import APIView
+import random
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import status, viewsets
+from rest_framework import status
+from rest_framework import viewsets
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import action
 
 from django.db.models import Sum, IntegerField
 from django.db.models.functions import Coalesce
@@ -88,6 +91,51 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
                 'email_utilizador': user.email_utilizador
             }
         }, status=status.HTTP_201_CREATED)
+    
+   # Enviar email
+    @action(detail=False, methods=['post'], url_path='codigo_email')
+    def enviar_codigo_verificacao(self, request):
+        email_usuario = request.data.get('email')
+
+        if not email_usuario:
+            return Response({"error": "Email é obrigatório"}, status=400)
+
+        codigo = random.randint(10000, 99999)
+        link_verificacao = f"http://localhost:5173/confirmemail?token={codigo}"
+
+        html_content = render_to_string('codigo_verificacao.html', {'link_verificacao': link_verificacao})
+
+        email = EmailMessage(
+            subject="Código de Verificação",
+            body=html_content,
+            from_email=None,  
+            to=[email_usuario]
+        )
+        email.content_subtype = 'html'  
+        email.send()
+
+        return Response({"message": "Código enviado com sucesso!", "codigo": codigo})
+    
+    # mudar password
+    @action(detail=False, methods=['post'], url_path='mudar_password')
+    def mudarPassword(self, request):
+        email = request.data.get('email_utilizador')
+        password = request.data.get('password_utilizador')
+
+        if not password or not email:
+            return Response({'error': 'Sem email ao password para ser alterada'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = Utilizador.objects.get(email_utilizador=email)
+        except Utilizador.DoesNotExist:
+            return Response({"error": "Utilizador não encontrado! Por favor tente mais tarde."})
+        
+        hashed_password = make_password(password)
+        user.password_utilizador = hashed_password
+        user.save()
+
+        return Response({'message': 'Senha alterada com sucesso!'}, status=200)
+
 
 
 class CategoriasViewSet(viewsets.ModelViewSet):
