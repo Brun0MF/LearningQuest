@@ -3,14 +3,15 @@ import { editarPerfil, getUtilizadorbyID } from "../../../api/utilizadores";
 
 export default function UserMetaCard() {
     const profileImages = [
-        "/gua1.png",
-        "/gua2.png",
-        "/gua3.png",
-        "/gua4.png",
-        "/gua5.png",
-        "/gua6.png",
+        "gua1.png",
+        "gua2.png",
+        "gua3.png",
+        "gua4.png",
+        "gua5.png",
+        "gua6.png",
     ];
-    const [selectedImage, setSelectedImage] = useState(profileImages[0]);
+
+    const [selectedImage, setSelectedImage] = useState<string>("");
     const [userId, setUserId] = useState<number | null>(null);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -34,34 +35,40 @@ export default function UserMetaCard() {
         }
     }
 
-// definicoes.tsx
-const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  try {
-    if (userId == null) {
-      console.error("ID do utilizador inexistente");
-      return;
-    }
+    useEffect(() => {
+        if (utilizador?.path_imagem) {
+            setSelectedImage(utilizador.path_imagem);
+        }
+    }, [utilizador]);
 
-    const formattedImage = selectedImage.replace(/^\/+/, ""); 
-    await editarPerfil(name, email, formattedImage, userId);
+    // definicoes.tsx
+    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            if (userId == null) {
+                console.error("ID do utilizador inexistente");
+                return;
+            }
 
-    setUtilizador((prev: any) =>
-      prev
-        ? {
-            ...prev,
-            nome_utilizador: name,
-            email_utilizador: email,
-            path_imagem:formattedImage,
-          }
-        : prev
-    );
+            const formattedImage = selectedImage.replace(/^\/+/, "");
+            await editarPerfil(name, email, formattedImage, userId);
 
-    closeModal();
-  } catch (error) {
-    console.log("Erro ao editar perfil: " + error);
-  }
-};
+            setUtilizador((prev: any) =>
+                prev
+                    ? {
+                        ...prev,
+                        nome_utilizador: name,
+                        email_utilizador: email,
+                        path_imagem: formattedImage,
+                    }
+                    : prev
+            );
+
+            closeModal();
+        } catch (error) {
+            console.log("Erro ao editar perfil: " + error);
+        }
+    };
 
 
     useEffect(() => {
@@ -82,7 +89,7 @@ const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
                 <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
                     <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
                         <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full">
-                            <img 
+                            <img
                                 src={utilizador?.path_imagem ? `/${utilizador.path_imagem}` : "/gua1.png"}
                                 alt="user"
                                 className="object-contain w-full h-full"
@@ -180,7 +187,7 @@ const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                                    />
+                                        disabled />
                                 </div>
                             </div>
 

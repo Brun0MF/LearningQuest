@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom"
 import './App.css'
 
-/* import PageInicial from "./views/pages/home/paginaIncial" */
+import PageInicial from "./views/pages/home/paginaIncial"
 import NotFound from "./views/pages/error/notFound"
 
 //home
@@ -31,7 +31,7 @@ function App() {
       <SidebarProvider>
         <Routes>
 
-          {/* <Route path='/' element={<PageInicial />}></Route> */}
+          <Route path='/' element={<PageInicial />}></Route>
 
           {/*LOGIN*/}
           <Route element={<LoginLayout />}>

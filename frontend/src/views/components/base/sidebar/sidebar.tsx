@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 import { FaGamepad } from "react-icons/fa";
 import { IoIosArrowDown, IoIosSettings } from "react-icons/io";
@@ -44,6 +44,7 @@ const othersItems: NavItem[] = [
 ];
 
 const AppSidebar: React.FC = () => {
+    const navigate = useNavigate();
     const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
     const location = useLocation();
 
@@ -61,6 +62,11 @@ const AppSidebar: React.FC = () => {
         (path: string) => location.pathname === path,
         [location.pathname]
     );
+
+    function handleLogout() {
+        localStorage.clear();
+        navigate("/");
+    }
 
     useEffect(() => {
         let submenuMatched = false;
@@ -153,32 +159,44 @@ const AppSidebar: React.FC = () => {
                                     />
                                 )}
                             </button>
-                        ) : (
-                            nav.path && (
-                                <Link
-                                    to={nav.path}
-                                    className={`menu-item group flex items-center gap-3 hover:bg-gray-100  transition-colors duration-150 rounded-md px-2 py-1 ${nav.name === "Sair"
-                                        ? "text-red-500 hover:text-red-600"
-                                        : isActive(nav.path)
-                                            ? "menu-item-active bg-gray-200"
-                                            : "menu-item-inactive"
-                                        }`}
-                                >
-                                    <span
-                                        className={`menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl ${!isExpanded && !isHovered ? 'lg:mx-auto' : ''} ${nav.name === "Sair"
-                                            ? "text-red-500"
-                                            : isActive(nav.path)
-                                                ? "menu-item-icon-active"
-                                                : "menu-item-icon-inactive"
-                                            } group-hover:text-brand-500 transition-colors duration-150`}
-                                    >
-                                        {nav.icon}
+                        ) : nav.name === "Sair" ? (
+                            <button
+                                onClick={handleLogout}
+                                className="menu-item w-full group flex items-center gap-3 hover:bg-gray-100 transition-colors duration-150 rounded-md px-2 py-1 text-red-500 hover:text-red-600"
+                            >
+                                <span className="menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl text-red-500 group-hover:text-red-600 transition-colors duration-150">
+                                    {nav.icon}
+                                </span>
+                                {(isExpanded || isHovered || isMobileOpen) && (
+                                    <span className="menu-item-text group-hover:text-red-600 transition-colors duration-150">
+                                        {nav.name}
                                     </span>
-                                    {(isExpanded || isHovered || isMobileOpen) && (
-                                        <span className="menu-item-text group-hover:text-brand-500 transition-colors duration-150">{nav.name}</span>
-                                    )}
-                                </Link>
-                            )
+                                )}
+                            </button>
+                        ) : (
+                            <Link
+                                to={nav.path!}
+                                className={`menu-item group flex items-center gap-3 hover:bg-gray-100  transition-colors duration-150 rounded-md px-2 py-1 ${nav.name === "Sair"
+                                    ? "text-red-500 hover:text-red-600"
+                                    : isActive(nav.path!)
+                                        ? "menu-item-active bg-gray-200"
+                                        : "menu-item-inactive"
+                                    }`}
+                            >
+                                <span
+                                    className={`menu-item-icon-size flex items-center justify-center flex-shrink-0 text-xl lg:text-2xl ${!isExpanded && !isHovered ? 'lg:mx-auto' : ''} ${nav.name === "Sair"
+                                        ? "text-red-500"
+                                        : isActive(nav.path!)
+                                            ? "menu-item-icon-active"
+                                            : "menu-item-icon-inactive"
+                                        } group-hover:text-brand-500 transition-colors duration-150`}
+                                >
+                                    {nav.icon}
+                                </span>
+                                {(isExpanded || isHovered || isMobileOpen) && (
+                                    <span className="menu-item-text group-hover:text-brand-500 transition-colors duration-150">{nav.name}</span>
+                                )}
+                            </Link>
                         )}
                         {nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
                             <div

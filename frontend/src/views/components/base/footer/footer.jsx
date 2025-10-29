@@ -7,7 +7,7 @@ export default function Footer() {
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
-                        <a href="https://learningquest.com/" className="flex items-center">
+                        <a href="" className="flex items-center">
                             <img src="/logoLearningQuest-NoBG.png" className="h-20 me-3" alt="Logo Learning Quest" />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap">Learning Quest</span>
                         </a>
@@ -17,7 +17,7 @@ export default function Footer() {
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Learning Quest</h2>
                             <ul className="text-gray-500 font-medium">
                                 <li className="mb-4">
-                                    <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Home</Link>
+                                    <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Jogos</Link>
                                 </li>
                                 <li className="mb-4">
                                     <Link to="/classificacoes" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Classificações</Link>
