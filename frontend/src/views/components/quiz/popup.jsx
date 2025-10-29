@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const QuizPopUp = () => {
+const QuizPopUp = ({onTerminar}) => {
   const quizQuestions = [
     {
       pergunta:
@@ -129,9 +129,12 @@ const QuizPopUp = () => {
             onClick={handleNext}
             className="rounded-xl px-3 py-2 text-white font-medium bg-verdeSuave-600 hover:bg-verdeSuave-700"
           >
-            {current < quizQuestions.length - 1 ? "Próxima" : "Terminar"}
+            Próxima
           </button>
         )}
+        <button onClick={onTerminar} className="rounded-xl px-3 py-2 text-white font-medium bg-red-600 hover:bg-red-700">
+          Terminar
+        </button>
       </div>
     </div>
   );

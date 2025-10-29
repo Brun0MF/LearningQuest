@@ -40,7 +40,7 @@ function App() {
         <Route element={<BaseLayout />}>
           <Route element={<PrivateRoute />}>
             <Route path='/jogos' element={<Home />}></Route>
-            <Route path='/jogos_niveis' element={<LevelMap />} />
+            <Route path='/jogos_niveis/:id_topico' element={<LevelMap />} />
             <Route path='/classificacoes' element={<Classificacao />}></Route>
             <Route path='/definicoes' element={<Definicoes />}></Route>
           </Route>

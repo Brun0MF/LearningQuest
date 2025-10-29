@@ -183,6 +183,43 @@ class PontuacaoViewSet(viewsets.ModelViewSet):
     queryset = Pontuacao.objects.all()
     serializer_class = PontuacaoSerializer
 
+    # PONTUACAO POR UTILIZADOR NO TOPICO
+    @action(detail=False, methods=["get"], url_path="by-user-topic")
+    def by_user_topic(self, request):
+        uid = request.query_params.get("id_utilizador")
+        tid = request.query_params.get("id_topico")
+
+        if not uid or not tid:
+            return Response(
+                {"error": "Parâmetros obrigatórios: id_utilizador e id_topico"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            uid = int(uid)
+            tid = int(tid)
+        except ValueError:
+            return Response(
+                {"error": "id_utilizador e id_topico devem ser números inteiros"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        total = (
+            Pontuacao.objects
+            .filter(id_utilizador_id=uid, id_topico_id=tid)
+            .aggregate(total=Coalesce(Sum("pontos"), 0, output_field=IntegerField()))
+            ["total"]
+        )
+
+        return Response(
+            {
+                "id_utilizador": uid,
+                "id_topico": tid,
+                "pontos": total,
+            },
+            status=status.HTTP_200_OK,
+        )
+
 class PercursosViewSet(viewsets.ModelViewSet):
     queryset = Percursos.objects.all()
     serializer_class = PercursosSerializer

@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import QuizPopUp from "../../components/quiz/popup";
+import { getPontuacao_user_topico } from "../../../api/pontuacao";
+import { useParams } from "react-router-dom";
 
 const LevelPath = () => {
   const levels = Array.from({ length: 10 }, (_, i) => i + 1);
-  const [score, setScore] = useState(5); // pontuação
-  const [hoveredLevel, setHoveredLevel] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const [pontuacao, setPontuacao] = useState([]);
+  const closeModal = () => setIsOpen(false);
+  const { id_topico } = useParams();
 
   const getHorizontalOffset = (index) => {
     const maxOffset = 200;
@@ -13,6 +18,34 @@ const LevelPath = () => {
   };
 
   const headerHeight = 80;
+
+  const handlePontuacaoUserTopico = async (id_user, id_topico) => {
+    try {
+      const response = await getPontuacao_user_topico(id_user, id_topico);
+      setPontuacao(response);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const handleFim = () => {
+    try {
+      closeModal();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    const raw = localStorage.getItem("id_user");
+    const parsed = raw && raw !== "null" && raw !== "undefined" ? parseInt(raw, 10) : NaN;
+    setUserId(Number.isNaN(parsed) ? null : parsed);
+    console.log(userId);
+  }, [])
+
+  useEffect(() => {
+    handlePontuacaoUserTopico(userId, Number(id_topico))
+  }, [userId, id_topico])
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
@@ -115,6 +148,11 @@ const LevelPath = () => {
           background: "transparent",
         }}
       >
+          {/* ✅ Barra de pontuação no topo */}
+      <div className="flex-col">
+        <img src="/estrela.svg" alt="estrela" className="w-5 h-5" />
+        <span>Pontuação: {pontuacao}</span>
+      </div>
         {levels.map((lvl, index) => {
           const offsetX = getHorizontalOffset(index);
 
@@ -130,7 +168,7 @@ const LevelPath = () => {
               }}
             >
               {/* Ilha flutuante */}
-              <Link to={`/nivel/${lvl}`}>
+              <button onClick={() => setIsOpen(true)}>
                 <img
                   src="/flutua.png"
                   alt={`Ilha ${lvl}`}
@@ -148,8 +186,15 @@ const LevelPath = () => {
                   }
                   onMouseLeave={(e) => (e.currentTarget.style.animation = "none")}
                 />
-              </Link>
+              </button>
 
+              {isOpen && (
+                <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-50">
+                  <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full relative animate-fadeIn">
+                    <QuizPopUp onTerminar={handleFim} />
+                  </div>
+                </div>
+              )}
               {/* Imagem do nível sempre à frente */}
               <img
                 src={`/nivel/${lvl}.png`}
