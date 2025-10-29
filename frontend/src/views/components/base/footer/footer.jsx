@@ -17,16 +17,13 @@ export default function Footer() {
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Learning Quest</h2>
                             <ul className="text-gray-500 font-medium">
                                 <li className="mb-4">
-                                    <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0,0)}>Home</Link>
+                                    <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Jogos</Link>
                                 </li>
                                 <li className="mb-4">
-                                   <Link to="/jogos" className="hover:underline" onClick={() => window.scrollTo(0,0)}>Jogos</Link>
+                                    <Link to="/classificacoes" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Classificações</Link>
                                 </li>
                                 <li className="mb-4">
-                                   <Link to="/classificacoes" className="hover:underline" onClick={() => window.scrollTo(0,0)}>Classificações</Link>
-                                </li>
-                                <li className="mb-4">
-                                   <Link to="/definicoes" className="hover:underline" onClick={() => window.scrollTo(0,0)}>Definições</Link>
+                                    <Link to="/definicoes" className="hover:underline" onClick={() => window.scrollTo(0, 0)}>Definições</Link>
                                 </li>
                             </ul>
                         </div>
@@ -50,11 +47,8 @@ export default function Footer() {
                         <div>
                             <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase">Legal</h2>
                             <ul className="text-gray-500 font-medium">
-                                <li className="mb-4">
-                                    <a href="#" className="hover:underline">Política de Privacidade</a>
-                                </li>
                                 <li>
-                                    <a href="#" className="hover:underline"> Termos &amp; Condições</a>
+                                    <a href="/termos-condicoes" className="hover:underline"> Termos &amp; Condições</a>
                                 </li>
                             </ul>
                         </div>

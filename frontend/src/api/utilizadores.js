@@ -61,7 +61,7 @@ export const enviarCodigo = async (email) => {
 
         return response.data;
     } catch (error) {
-        console.error('Erro no registar nova conta:', error.response?.data || error.message);
+        console.error('Erro ao enviar email:', error.response?.data || error.message);
         throw error;
     }
 };
@@ -79,19 +79,19 @@ export const mudarPassword = async (password) => {
 
         return response.data;
     } catch (error) {
-        console.error('Erro no registar nova conta:', error.response?.data || error.message);
+        console.error('Erro ao mudar a password:', error.response?.data || error.message);
         throw error;
     }
 };
 
 export const editarPerfil = async (nome, email, path, id_user) => {
-  const payload = {};
-  if (nome && nome.trim() !== "") payload.nome_utilizador = nome.trim();
-  if (email && email.trim() !== "") payload.email_utilizador = email.trim();
-  if (path && path.trim() !== "") payload.path_imagem = path.trim();
+    const payload = {};
+    if (nome && nome.trim() !== "") payload.nome_utilizador = nome.trim();
+    if (email && email.trim() !== "") payload.email_utilizador = email.trim();
+    if (path && path.trim() !== "") payload.path_imagem = path.trim();
 
-  const { data } = await axios.patch(`${url}${id_user}/editar/`, payload);
-  return data;
+    const { data } = await axios.patch(`${url}${id_user}/editar/`, payload);
+    return data;
 };
 
 export const getUtilizadorbyID = async (id_user) => {
