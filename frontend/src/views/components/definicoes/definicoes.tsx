@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { editarPerfil } from "../../../api/utilizadores";
+import { useEffect, useState } from "react";
+import { editarPerfil, getUtilizadorbyID } from "../../../api/utilizadores";
 
 export default function UserMetaCard() {
     const profileImages = [
@@ -10,25 +10,51 @@ export default function UserMetaCard() {
         "/gua5.png",
         "/gua6.png",
     ];
-    const [selectedImage, setSelectedImage] = useState(profileImages[0])
+    const [selectedImage, setSelectedImage] = useState(profileImages[0]);
+    const [userId, setUserId] = useState<number | null>(null);
 
     const [isOpen, setIsOpen] = useState(false);
-    const [name, setName] = useState("Diogo Oliveira");
-    const [email, setEmail] = useState("dfso2013@gmail.com");
-
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [utilizador, setUtilizador] = useState([]);
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
+
+    const handleUser = async (userId: number) => {
+        try {
+            console.log(userId);
+            const response = await getUtilizadorbyID(userId);
+            setUtilizador(response);
+            setName(response?.nome_utilizador ?? "");
+            setEmail(response?.email_utilizador ?? "");
+            console.log(name);
+            return response;
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
         try {
             e.preventDefault();
-            editarPerfil();
+            const response = await editarPerfil(name, email, '', userId);
             closeModal();
-        } catch(error) {
+            //await handleUser(userId);
+        } catch (error) {
             console.log('Erro ao editar perfil: ' + error);
         }
     };
 
+    useEffect(() => {
+        const raw = localStorage.getItem("id_user");
+        const parsed = raw && raw !== "null" && raw !== "undefined" ? parseInt(raw, 10) : NaN;
+        setUserId(Number.isNaN(parsed) ? null : parsed);
+        console.log(userId);
+    }, [])
+
+    useEffect(() => {
+        if (userId) handleUser(userId);
+    }, [userId])
 
     return (
         <>

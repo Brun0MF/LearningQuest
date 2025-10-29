@@ -92,3 +92,8 @@ export const editarPerfil = async (nome, email, path, id_user) => {
     });
     return response.data;
 }
+
+export const getUtilizadorbyID = async (id_user) => {
+    const response = await axios.get(`${url}${id_user}/`);
+    return response.data;
+}
