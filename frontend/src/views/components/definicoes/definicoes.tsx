@@ -38,6 +38,7 @@ export default function UserMetaCard() {
     useEffect(() => {
         if (utilizador?.path_imagem) {
             setSelectedImage(utilizador.path_imagem);
+            console.log(utilizador.path_imagem);
         }
     }, [utilizador]);
 

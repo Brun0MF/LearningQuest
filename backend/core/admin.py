@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 from django.template.response import TemplateResponse
+from .models import Utilizador, Categorias, Topicos, Niveis, Perguntas, Pontuacao
 
-# Admin site personalizado
 class MeuAdminSite(admin.AdminSite):
     site_header = "Painel de Administração - Learning Quest"
     site_title = "Admin LQ"
@@ -16,10 +16,6 @@ class MeuAdminSite(admin.AdminSite):
         return custom_urls + urls
 
     def validacoes_view(self, request):
-        # Aqui podes colocar queries ou lógica de validação
-        from .models import Utilizador, Categorias, Topicos, Niveis, Perguntas
-
-        # Exemplo: utilizadores com pontuação zero
         utilizadores_nao_validados = Utilizador.objects.filter(pontuacaogeral_utilizador=0)
 
         contexto = dict(
@@ -29,15 +25,11 @@ class MeuAdminSite(admin.AdminSite):
         )
         return TemplateResponse(request, "admin/validacoes.html", contexto)
 
-
-# Instância do admin personalizado
 meu_admin_site = MeuAdminSite(name='meuadmin')
 
-# Registar modelos normais (exceto Pontuacao)
-from .models import Utilizador, Categorias, Topicos, Niveis, Perguntas
+@admin.register(Perguntas, site=meu_admin_site)
+class PerguntasAdmin(admin.ModelAdmin):
+    list_display = ('id_pergunta', 'materia', 'linguagem', 'aprovado')
+    list_filter = ('aprovado', 'id_nivel', 'id_topico')
+    search_fields = ('materia', 'linguagem', 'cid')
 
-meu_admin_site.register(Utilizador)
-meu_admin_site.register(Categorias)
-meu_admin_site.register(Topicos)
-meu_admin_site.register(Niveis)
-meu_admin_site.register(Perguntas)
