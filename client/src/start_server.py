@@ -10,7 +10,7 @@ def start():
     logs_mng.print_info("Server","Starting Server!")
     ai_mng.init()
     ipfs_mng.init()
-    app.run(port=5000,debug=True)    
+    app.run(host="0.0.0.0", port=5000)    
     logs_mng.print_info("Server","Stopping Server!")
 
 
