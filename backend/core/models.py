@@ -13,7 +13,7 @@ class Categorias(models.Model):
     titulo_categoria = models.CharField(max_length=200)
 
     class Meta:
-        managed = False
+       
         db_table = 'categorias'
 
 
@@ -25,7 +25,7 @@ class Percursos(models.Model):
     perguntas_cid = models.CharField(max_length=1024)
 
     class Meta:
-        managed = False
+       
         db_table = 'percursos'
 
 
@@ -36,7 +36,7 @@ class Pontuacao(models.Model):
     pontos = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+       
         db_table = 'pontuacao'
 
 
@@ -47,7 +47,7 @@ class Topicos(models.Model):
     id_categoria = models.ForeignKey(Categorias, models.DO_NOTHING, db_column='id_categoria')
 
     class Meta:
-        managed = False
+       
         db_table = 'topicos'
 
 
@@ -60,5 +60,5 @@ class Utilizador(models.Model):
     path_imagem = models.CharField(max_length=20)
 
     class Meta:
-        managed = False
+       
         db_table = 'utilizador'

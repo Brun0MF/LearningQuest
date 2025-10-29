@@ -26,7 +26,17 @@ export const useSidebar = () => {
 export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [isExpanded, setIsExpanded] = useState(true);
+    const [isExpanded, setIsExpanded] = useState<boolean>(() => {
+        try {
+            if (typeof window !== "undefined") {
+                const stored = localStorage.getItem("sidebarExpanded");
+                return stored ? stored === "true" : false;
+            }
+        } catch (e) {
+            // If localStorage is not available for some reason, default to closed
+        }
+        return false;
+    });
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
@@ -51,7 +61,15 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
     }, []);
 
     const toggleSidebar = () => {
-        setIsExpanded((prev) => !prev);
+        setIsExpanded((prev) => {
+            const next = !prev;
+            try {
+                localStorage.setItem("sidebarExpanded", String(next));
+            } catch (e) {
+                // ignore
+            }
+            return next;
+        });
     };
 
     const toggleMobileSidebar = () => {

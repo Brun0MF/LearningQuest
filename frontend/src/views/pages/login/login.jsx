@@ -29,7 +29,7 @@ const Login = () => {
                 showConfirmButton: false
             });
         } catch (err) {
-            const errorMsg = err.response?.data?.error || "Erro ao criar conta";
+            const errorMsg = err.response?.data?.error || "Erro ao efetuar login";
 
             Swal.fire({
                 icon: "error",
