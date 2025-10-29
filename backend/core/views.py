@@ -295,6 +295,33 @@ class PerguntasViewSet(viewsets.ModelViewSet):
         return Response(ai_json, status=status.HTTP_200_OK)
 
 
+    @action(detail=True, methods=["get"], url_path="get_level_questions")
+    def get_level_questions(self, request, pk=None):
+        
+        in_topico = request.query_params.get('topico')
+        in_nivel = request.query_params.get('nivel')
+        if(in_topico is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        if(in_nivel is None):
+            return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            pergunta = Perguntas.objects.get(id_topico=in_topico,id_nivel=in_nivel)
+            output = "["
+            for p in pergunta:
+                pergunta_cid = p.cid
+                urlp = f"{url}get_question?cid={pergunta_cid}"
+                response = requests.get(urlp, timeout=300)
+                response.raise_for_status()
+                ai_json = response.json()                
+                output += f"{ai_json}, "
+            output += "]"
+        except Perguntas.DoesNotExist:
+                return Response(
+                    {"error": f"Não existem perguntas com esse Topico e Nivel"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        return Response(output, status=status.HTTP_200_OK)
+
 
     @action(detail=True, methods=["post"], url_path="ipfs_connect")
     def ipfs_connect(self, request, pk=None):
