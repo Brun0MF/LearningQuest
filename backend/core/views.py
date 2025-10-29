@@ -227,7 +227,7 @@ class NiveisViewSet(viewsets.ModelViewSet):
     serializer_class = NiveisSerializer
 
     
-class PerguntasViewSet(viewseits.ModelViewSet):
+class PerguntasViewSet(viewsets.ModelViewSet):
     queryset = Perguntas.objects.all()
     serializer_class = PerguntasSerializer
 
