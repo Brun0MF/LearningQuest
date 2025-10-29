@@ -7,8 +7,16 @@ import requests
 import os
 import json
 
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    else:
+        return os.path.join(os.path.abspath("."), relative_path)
+
+
+
 IPFS_API = "http://127.0.0.1:5001/api/v0"
-IPFS_BIN = "ipfs.exe" if platform.system().lower() == "windows" else "ipfs"
+IPFS_BIN = resource_path("ipfs.exe") if platform.system().lower() == "windows" else "ipfs"
 
 def check_ipfs_installed():
     if not os.path.exists(IPFS_BIN):
@@ -100,6 +108,32 @@ def ipfs_get_json(cid):
         return None
 
 
+def ipfs_get_address():
+    try:
+        res = requests.post(f"{IPFS_API}/id", timeout=10)
+        res.raise_for_status()
+        info = res.json()
+        peer_id = info.get("ID")
+        addresses = info.get("Addresses", [])
+        logs_mng.print_success("IPFS", f"Node ID: {peer_id}")
+        for addr in addresses:
+            logs_mng.print_info("IPFS", f"Address: {addr}")
+        return {"id": peer_id, "addresses": addresses}
+    except Exception as e:
+        logs_mng.print_error("IPFS", f"Failed to get node address: {e}")
+        return None
+
+
+def ipfs_connect(address):
+    try:
+        res = requests.post(f"{IPFS_API}/swarm/connect", params={"arg": address}, timeout=10)
+        res.raise_for_status()
+        result = res.json()
+        logs_mng.print_success("IPFS", f"Connected to {address}")
+        return result
+    except Exception as e:
+        logs_mng.print_error("IPFS", f"Failed to connect to {address}: {e}")
+        return None
 
 def init():
     check_ipfs_installed()
