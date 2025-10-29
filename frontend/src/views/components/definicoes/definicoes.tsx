@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { editarPerfil } from "../../../api/utilizadores";
+import { useEffect, useState } from "react";
+import { editarPerfil, getUtilizadorbyID } from "../../../api/utilizadores";
 
 export default function UserMetaCard() {
     const profileImages = [
@@ -10,25 +10,70 @@ export default function UserMetaCard() {
         "/gua5.png",
         "/gua6.png",
     ];
-    const [selectedImage, setSelectedImage] = useState(profileImages[0])
+    const [selectedImage, setSelectedImage] = useState(profileImages[0]);
+    const [userId, setUserId] = useState<number | null>(null);
 
     const [isOpen, setIsOpen] = useState(false);
-    const [name, setName] = useState("Diogo Oliveira");
-    const [email, setEmail] = useState("dfso2013@gmail.com");
-
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [utilizador, setUtilizador] = useState([]);
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
 
-    const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleUser = async (userId: number) => {
         try {
-            e.preventDefault();
-            editarPerfil();
-            closeModal();
-        } catch(error) {
-            console.log('Erro ao editar perfil: ' + error);
+            console.log(userId);
+            const response = await getUtilizadorbyID(userId);
+            setUtilizador(response);
+            setName(response?.nome_utilizador ?? "");
+            setEmail(response?.email_utilizador ?? "");
+            console.log(name);
+            return response;
+        } catch (e) {
+            console.log(e);
         }
-    };
+    }
 
+// definicoes.tsx
+const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  try {
+    if (userId == null) {
+      console.error("ID do utilizador inexistente");
+      return;
+    }
+
+    await editarPerfil(name, email, selectedImage || null, userId);
+
+    // Atualiza o estado local imediatamente (UX mais fluida)
+    setUtilizador((prev: any) =>
+      prev
+        ? {
+            ...prev,
+            nome_utilizador: name,
+            email_utilizador: email,
+            path_imagem: selectedImage || prev.path_imagem,
+          }
+        : prev
+    );
+
+    closeModal();
+  } catch (error) {
+    console.log("Erro ao editar perfil: " + error);
+  }
+};
+
+
+    useEffect(() => {
+        const raw = localStorage.getItem("id_user");
+        const parsed = raw && raw !== "null" && raw !== "undefined" ? parseInt(raw, 10) : NaN;
+        setUserId(Number.isNaN(parsed) ? null : parsed);
+        console.log(userId);
+    }, [])
+
+    useEffect(() => {
+        if (userId) handleUser(userId);
+    }, [userId])
 
     return (
         <>

@@ -145,17 +145,15 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
     def editar(self, request, pk=None):
         user = self.get_object()
 
-        # (opcional) blindar ainda mais no lado da view
         allowed = {'nome_utilizador', 'email_utilizador', 'path_imagem'}
-        data = {k: v for k, v in request.data.items() if k in allowed}
+        data = {k: v for k, v in request.data.items() if k in allowed and v not in ("", None)}
 
-        from .serializers import UtilizadorEditSerializer
-        serializer = UtilizadorEditSerializer(user, data=data, partial=True)
+        serializer = self.get_serializer(user, data=data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
+        
 class CategoriasViewSet(viewsets.ModelViewSet):
     queryset = Categorias.objects.all()
     serializer_class = CategoriasSerializer
