@@ -39,4 +39,5 @@ from .models import Utilizador, Categorias, Topicos, Percursos
 meu_admin_site.register(Utilizador)
 meu_admin_site.register(Categorias)
 meu_admin_site.register(Topicos)
-meu_admin_site.register(Percursos)
+meu_admin_site.register(Niveis)
+meu_admin_site.register(Perguntas)

@@ -240,11 +240,22 @@ class PerguntasViewSet(viewseits.ModelViewSet):
             in_topico = request.query_params.get('topico')
             in_nivel = request.query_params.get('nivel')
             in_linguagem = request.query_params.get('linguagem')
-
-            topico = Topicos.objects.get(id_topico=in_topico)
-            topico_titulo = topico.titulo_topico
-            nivel = Niveis.objects.get(id_nivel=in_nivel)
-            nivel_titulo = nivel.titulo_nivel
+            
+            try:
+                topico = Topicos.objects.get(id_topico=in_topico)
+                topico_titulo = topico.titulo_topico
+                nivel = Niveis.objects.get(id_nivel=in_nivel)
+                nivel_titulo = nivel.titulo_nivel
+            except Topicos.DoesNotExist:
+                return Response(
+                    {"error": f"Tópico com ID {in_topico} não existe."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            except Niveis.DoesNotExist:
+                return Response(
+                    {"error": f"Nivel com ID {in_nivel} não existe."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
 
             urlp = f"{url}generate_question?topic={topico_titulo}&content={nivel_titulo}&lang={in_linguagem}"
             response = requests.get(urlp, timeout=300)
