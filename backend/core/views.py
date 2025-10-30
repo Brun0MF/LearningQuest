@@ -156,6 +156,26 @@ class UtilizadorViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
         
+    # EDITAR PONTUACAO (total)
+    @action(detail=True, methods=['patch', 'put'], url_path='editar-pontuacao')
+    def editar_pontuacao(self, request, pk=None):
+        user = self.get_object()
+
+        # campo correto no modelo Utilizador:
+        allowed = {'pontuacaogeral_utilizador'}
+        data = {k: v for k, v in request.data.items() if k in allowed and v not in ("", None)}
+
+        if not data:
+            return Response({'erro': 'Nenhum valor de pontuação fornecido.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(user, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CategoriasViewSet(viewsets.ModelViewSet):
     queryset = Categorias.objects.all()
     serializer_class = CategoriasSerializer

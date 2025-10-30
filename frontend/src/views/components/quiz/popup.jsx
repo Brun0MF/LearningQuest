@@ -16,11 +16,16 @@ const QuizPopUp = ({
   const [selected, setSelected] = useState(null);
   const [validated, setValidated] = useState(false);
 
+  // SWAL: guarda para não repetir o popup de conclusão
+  const [finalizado, setFinalizado] = useState(false);
+
   // ⚡ Atualiza quando perguntas mudam
   useEffect(() => {
     setCurrent(0);
     setSelected(null);
     setValidated(false);
+    // SWAL: reset do guarda quando muda a lista
+    setFinalizado(false);
   }, [lista]);
 
   const question = lista[current];
@@ -52,7 +57,10 @@ const QuizPopUp = ({
 
   // ⚡ Efeito: se atingir o máximo de pontos, mostra popup de sucesso
   useEffect(() => {
+    // SWAL: dispara só uma vez e apenas com alvo válido
+    if (finalizado) return;
     if (incrementa && pontos >= pontosMax && pontosMax > 0) {
+      setFinalizado(true);
       Swal.fire({
         icon: "success",
         title: "🎉 Nível concluído!",
@@ -62,7 +70,7 @@ const QuizPopUp = ({
         onTerminar();
       });
     }
-  }, [pontos, pontosMax, incrementa, onTerminar]);
+  }, [pontos, pontosMax, incrementa, onTerminar, finalizado]);
 
   return (
     <div className="flex flex-col gap-5">
