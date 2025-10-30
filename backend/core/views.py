@@ -367,15 +367,22 @@ class PerguntasViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_404_NOT_FOUND
                 )
 
-            urlp = f"{url}generate_question?topic={topico_titulo}&content={nivel_titulo}&lang={in_linguagem}"
+            urlp = f"{self.url}generate_question?topic={topico_titulo}&content={nivel_titulo}&lang={in_linguagem}"
             response = requests.get(urlp, timeout=300)
             response.raise_for_status()
             ai_json = response.json()
-            data = {"id_topic":in_topico,"materia":in_materia,"linguagem":in_linguagem,"cid":ai_json.get("cid"),"aprovado":False}
+            # criar a pergunta localmente com os campos corretos
+            data = {
+                "id_topic": in_topico,
+                "materia": topico_titulo,
+                "linguagem": in_linguagem,
+                "cid": ai_json.get("cid"),
+                "aprovado": False,
+            }
             serializer = self.get_serializer(data=data)
             if serializer.is_valid():
                 serializer.save()
-            return Response({"STATUS":"HTTP_200_OK","CID":""}, status=status.HTTP_200_OK)
+            return Response({"STATUS": "HTTP_200_OK", "CID": ai_json.get("cid", "")}, status=status.HTTP_200_OK)
         except requests.exceptions.RequestException as e:    
             return Response({"STATUS":"HTTP_500_INTERNAL_SERVER_ERROR"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -389,7 +396,7 @@ class PerguntasViewSet(viewsets.ModelViewSet):
         try:
             pergunta = Perguntas.objects.get(id_pergunta=in_pergunta)
             pergunta_cid = pergunta.cid
-            urlp = f"{url}get_question?cid={pergunta_cid}"
+            urlp = f"{self.url}get_question?cid={pergunta_cid}"
             response = requests.get(urlp, timeout=300)
             response.raise_for_status()
             ai_json = response.json()
@@ -401,7 +408,7 @@ class PerguntasViewSet(viewsets.ModelViewSet):
         return Response(ai_json, status=status.HTTP_200_OK)
 
 
-    @action(detail=True, methods=["get"], url_path="get_level_questions")
+    @action(detail=False, methods=["get"], url_path="get_level_questions")
     def get_level_questions(self, request, pk=None):
         
         in_topico = request.query_params.get('topico')
@@ -411,22 +418,22 @@ class PerguntasViewSet(viewsets.ModelViewSet):
         if(in_nivel is None):
             return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            pergunta = Perguntas.objects.filter(id_topico=in_topico,id_nivel=in_nivel)
-            output = "["
-            for p in pergunta:
+            qs = Perguntas.objects.filter(id_topico=in_topico, id_nivel=in_nivel)
+            if not qs.exists():
+                return Response({"error": "Não existem perguntas com esse Topico e Nivel"}, status=status.HTTP_404_NOT_FOUND)
+
+            results = []
+            for p in qs:
                 pergunta_cid = p.cid
-                urlp = f"{url}get_question?cid={pergunta_cid}"
+                urlp = f"{self.url}get_question?cid={pergunta_cid}"
                 response = requests.get(urlp, timeout=300)
                 response.raise_for_status()
-                ai_json = response.json()                
-                output += f"{ai_json}, "
-            output += "]"
+                ai_json = response.json()
+                results.append(ai_json)
         except Perguntas.DoesNotExist:
-                return Response(
-                    {"error": f"Não existem perguntas com esse Topico e Nivel"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-        return Response(output, status=status.HTTP_200_OK)
+                # Este except não será normalmente atingido porque filter() não lança DoesNotExist.
+                return Response({"error": "Não existem perguntas com esse Topico e Nivel"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(results, status=status.HTTP_200_OK)
 
 
     @action(detail=True, methods=["post"], url_path="ipfs_connect")
@@ -434,7 +441,7 @@ class PerguntasViewSet(viewsets.ModelViewSet):
         in_endereco = request.query_params.get('endereco')
         if(in_endereco is None):
             return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
-        urlp = f"{url}connect?address={in_endereco}"
+        urlp = f"{self.url}connect?address={in_endereco}"
         response = requests.post(urlp, timeout=300)
         response.raise_for_status()
         ai_json = response.json()
@@ -443,7 +450,7 @@ class PerguntasViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], url_path="ipfs_address")
     def ipfs_address(self, request, pk=None):
-        urlp = f"{url}address"
+        urlp = f"{self.url}address"
         response = requests.get(urlp, timeout=300)
         response.raise_for_status()
         ai_json = response.json()

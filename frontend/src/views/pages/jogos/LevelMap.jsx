@@ -20,7 +20,7 @@ const LevelPath = () => {
   const { id_topico } = useParams();
   const [incrementa, setIncrementa] = useState(false);
   const [perguntas, setPerguntas] = useState([]);
-  const [nivelID, setNivelID] = useState("");
+  const [nivelID, setNivelID] = useState(1);
 
   const pontos = pontuacao?.pontos ?? 0;
   const nivelAtual = Math.min(10, Math.max(1, Math.floor(pontos / 10) + 1));
@@ -67,20 +67,100 @@ const LevelPath = () => {
     try {
       const pontosMax = nivelSelecionado * 10;
       const response = await getNivelTopico(id_topico, pontosMax);
-      console.log(response);
-      setNivelID(response.id_nivel);
+      // API might return data either in response.data or directly in response
+      const idNivel = response?.id_nivel ?? response?.data?.id_nivel ?? null;
+      if (idNivel !== null) setNivelID(idNivel);
+      // return the resolved id so callers don't rely on state update timing
+      return idNivel;
     } catch (e) {
       console.log(e);
     }
   }
 
-  const handlePerguntas = async () => {
+  const handlePerguntas = async (nivel = null) => {
     try {
-      const response = getPerguntasNivel(id_topico, nivelID);
-      setPerguntas(response?.data ?? response ?? []);
+      // allow passing a nivel directly to avoid relying on state-update timing
+      const nivelParaBuscar = nivel ?? nivelID;
+      const response = await getPerguntasNivel(id_topico, nivelParaBuscar);
+      const raw = response?.data ?? response ?? [];
+
+      // Normalize perguntas to the shape expected by QuizPopUp:
+      // { pergunta, opcoes: [a,b,c,d], correta: index }
+      const normalized = (Array.isArray(raw) ? raw : []).map((q) => {
+        // prefer existing opcoes array
+        let opcoes = Array.isArray(q.opcoes) && q.opcoes.length ? q.opcoes.slice() : [];
+        if (opcoes.length === 0) {
+          if (q.opcao_a !== undefined) opcoes.push(q.opcao_a);
+          if (q.opcao_b !== undefined) opcoes.push(q.opcao_b);
+          if (q.opcao_c !== undefined) opcoes.push(q.opcao_c);
+          if (q.opcao_d !== undefined) opcoes.push(q.opcao_d);
+        }
+
+        // detect correct answer in several possible fields
+        let correta = null;
+        const pickFromValue = (val) => {
+          if (val === null || val === undefined) return null;
+          if (typeof val === "number") {
+            // assume 0-based or 1-based
+            if (val >= 1 && val <= 4) return val - 1;
+            return val;
+          }
+          if (typeof val === "string") {
+            const s = val.trim().toLowerCase();
+            if (["a", "b", "c", "d"].includes(s)) return ["a", "b", "c", "d"].indexOf(s);
+            const n = parseInt(s, 10);
+            if (!Number.isNaN(n)) return n >= 1 && n <= 4 ? n - 1 : n;
+          }
+          return null;
+        };
+
+        correta = pickFromValue(q.correta ?? q.correct ?? q.resposta ?? q.answer ?? q.correta_letra);
+
+        // fallback: if no correta found but opcoes exist, set to -1 (unknown) to avoid accidental true/false
+        if (correta === null) correta = -1;
+
+        return {
+          ...q,
+          pergunta: q.pergunta ?? q.question ?? "(Pergunta indisponível)",
+          opcoes,
+          correta,
+        };
+      });
+
+      // Shuffle options inside each question while preserving the correct index
+      const shuffle = (arr) => {
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      };
+
+      const withShuffledOptions = normalized.map((q) => {
+        if (!Array.isArray(q.opcoes) || q.opcoes.length === 0) return q;
+
+        // keep original indices to map correta after shuffling
+        const indexed = q.opcoes.map((opt, idx) => ({ opt, idx }));
+        shuffle(indexed);
+        const newOpcoes = indexed.map((x) => x.opt);
+        let newCorreta = -1;
+        if (typeof q.correta === 'number' && q.correta >= 0) {
+          const found = indexed.findIndex((x) => x.idx === q.correta);
+          newCorreta = found >= 0 ? found : -1;
+        }
+        return { ...q, opcoes: newOpcoes, correta: newCorreta };
+      });
+
+      // Shuffle question order so the user sees questions in random order
+      shuffle(withShuffledOptions);
+
+      setPerguntas(withShuffledOptions);
+      console.log("Perguntas carregadas para nivel", nivelParaBuscar, normalized);
+      return normalized;
     } catch (e) {
       console.log(e);
       setPerguntas([]);
+      return [];
     }
   }
 
@@ -249,18 +329,16 @@ const LevelPath = () => {
               <button
                 onClick={async () => {
                   try {
-                    await handleNivelTopicoPont(lvl);
-                    await handlePerguntas();
+                    // get idNivel from API call so we don't rely on setState timing
+                    const idNivel = await handleNivelTopicoPont(lvl);
+                    await handlePerguntas(idNivel);
                     const alvo = (Math.floor(pontos / 10) + 1) * 10;
+                    console.log('perguntas (after fetch):', perguntas);
                     setPontosAlvo(alvo);
                     setBloquearXP(false);
                     setIsOpen(true);
-                    console.log(nivelID)
-                    if (lvl === nivelAtual) {
-                      setIncrementa(true);
-                    } else {
-                      setIncrementa(false);
-                    }
+                    console.log('nivelID (returned):', idNivel, 'state nivelID:', nivelID);
+                    setIncrementa(lvl === nivelAtual);
                   } catch (e) {
                     Swal.fire({
                       icon: "error",
