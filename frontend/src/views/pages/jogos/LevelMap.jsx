@@ -4,6 +4,7 @@ import { getPontuacao_user_topico, updatePontuacao } from "../../../api/pontuaca
 import { useParams } from "react-router-dom";
 import { getPerguntasNivel } from "../../../api/perguntas";
 import { getNivelTopico } from "../../../api/niveis";
+import { editarPontuacaoTotal, getPontuacaoTotal } from "../../../api/utilizadores";
 
 const LevelPath = () => {
   const levels = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -22,9 +23,13 @@ const LevelPath = () => {
   const [nivelID, setNivelID] = useState("");
 
   const pontos = pontuacao?.pontos ?? 0;
-  const nivelAtual = Math.min(10, Math.max(1, Math.ceil(pontos / 10)));
+  const nivelAtual = Math.min(10, Math.max(1, Math.floor(pontos / 10) + 1));
   const baseDoNivel = (nivelAtual - 1) * 10;
   const progresso = ((pontos - baseDoNivel) / 10) * 100;
+  const [pontuacaoTotal, setPontuacaoTotal] = useState(0);
+  const [deltaTotal, setDeltaTotal] = useState(0);
+  const [pontosAlvo, setPontosAlvo] = useState(0);
+  const [bloquearXP, setBloquearXP] = useState(false);
 
   const getHorizontalOffset = (index) => {
     const maxOffset = 200;
@@ -33,6 +38,20 @@ const LevelPath = () => {
   };
 
   const headerHeight = 80;
+
+  useEffect(() => {
+    const fetchTotal = async () => {
+      try {
+        if (!userId) return;
+        const total = await getPontuacaoTotal(userId);
+        setPontuacaoTotal(Number.isFinite(total) ? total : 0);
+      } catch (e) {
+        console.log(e);
+        setPontuacaoTotal(0);
+      }
+    };
+    fetchTotal();
+  }, [userId]);
 
   const handlePontuacaoUserTopico = async (id_user, id_topico) => {
     try {
@@ -58,7 +77,7 @@ const LevelPath = () => {
   const handlePerguntas = async () => {
     try {
       const response = getPerguntasNivel(id_topico, nivelID);
-      setPerguntas(response);
+      setPerguntas(response?.data ?? response ?? []);
     } catch (e) {
       console.log(e);
       setPerguntas([]);
@@ -68,6 +87,15 @@ const LevelPath = () => {
   const handleFim = async () => {
     try {
       await updatePontuacao(userId, id_topico, pontos);
+      if (deltaTotal !== 0) {
+        const novoTotal = Math.max(0, (pontuacaoTotal ?? 0) + deltaTotal);
+
+        setPontuacaoTotal(novoTotal);
+
+        await editarPontuacaoTotal(userId, novoTotal);
+
+        setDeltaTotal(0);
+      }
       closeModal();
     } catch (e) {
       console.log(e);
@@ -75,10 +103,24 @@ const LevelPath = () => {
   }
 
   const handlePontuacaoChange = (delta) => {
-    setPontuacao((prev) => ({
-      ...prev,
-      pontos: Math.max(0, (prev.pontos ?? 0) + delta),
-    }));
+    if (!incrementa || bloquearXP) return;
+
+    setPontuacao((prev) => {
+      const atual = prev.pontos ?? 0;
+      const novo = Math.max(0, Math.min(pontosAlvo, atual + delta)); // cap nos pontosAlvo
+
+      // acumula delta total apenas se mudou
+      if (novo !== atual) {
+        setDeltaTotal((d) => d + (novo - atual));
+      }
+
+      // se atingiu o alvo, bloqueia novos incrementos (mas NÃO mexe no incrementa)
+      if (novo >= pontosAlvo) {
+        setBloquearXP(true);
+      }
+
+      return { ...prev, pontos: novo };
+    });
   };
 
   useEffect(() => {
@@ -209,10 +251,11 @@ const LevelPath = () => {
                   try {
                     await handleNivelTopicoPont(lvl);
                     await handlePerguntas();
+                    const alvo = (Math.floor(pontos / 10) + 1) * 10;
+                    setPontosAlvo(alvo);
+                    setBloquearXP(false);
                     setIsOpen(true);
-                    handleNivelTopicoPont();
                     console.log(nivelID)
-                    handlePerguntas();
                     if (lvl === nivelAtual) {
                       setIncrementa(true);
                     } else {
@@ -292,7 +335,7 @@ const LevelPath = () => {
                 onTerminar={handleFim}
                 incrementa={incrementa}
                 pontos={pontuacao.pontos}
-                pontosMax={nivelAtual * 10}
+                pontosMax={pontosAlvo}
                 onPontuacaoChange={handlePontuacaoChange}
               />
             </div>

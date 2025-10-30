@@ -98,3 +98,24 @@ export const getUtilizadorbyID = async (id_user) => {
     const response = await axios.get(`${url}${id_user}/`);
     return response.data;
 }
+
+export const editarPontuacaoTotal = async (id_user, novaPontuacao) => {
+  try {
+    const body = { pontuacaogeral_utilizador: novaPontuacao };
+
+    const response = await axios.patch(
+      `${url}${id_user}/editar-pontuacao/`,
+      body
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao editar pontuação total:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const getPontuacaoTotal = async (id_user) => {
+  const data = await getUtilizadorbyID(id_user);
+  return Number(data.pontuacaogeral_utilizador ?? 0);
+};
