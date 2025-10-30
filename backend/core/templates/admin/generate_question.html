@@ -1,0 +1,91 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Gerar Pergunta</h1>
+
+{% if messages %}
+{% for message in messages %}
+<p class="mess {{ message.tags }}">{{ message }}</p>
+{% endfor %}
+{% endif %}
+
+<form method="post" style="margin-bottom:20px">
+    {% csrf_token %}
+    <label>Topico:
+        <select name="topico">
+            <option value="">-- escolher --</option>
+            {% for t in topicos %}
+            <option value="{{ t.id_topico }}">{{ t.titulo_topico }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br />
+    <label>Nivel:
+        <select name="nivel" id="nivel-select">
+            <option value="">-- primeiro escolha um tópico --</option>
+        </select>
+    </label>
+    <br />
+    <label>Linguagem:
+        <input type="text" name="linguagem" value="python" />
+    </label>
+    <br />
+    <button type="submit">Gerar Pergunta</button>
+</form>
+
+{% if pergunta %}
+<h2>Pergunta gerada (ID: {{ pergunta.id_pergunta }})</h2>
+<p><strong>CID:</strong> {{ pergunta.cid }}</p>
+<h3>Conteúdo retornado pelo serviço AI</h3>
+<pre>{{ question_content|safe|default:"(sem conteúdo)" }}</pre>
+
+<form method="post" action="{{ acao_url }}">
+    {% csrf_token %}
+    <input type="hidden" name="pergunta_id" value="{{ pergunta.id_pergunta }}" />
+    <button type="submit" name="acao" value="aprovar">Aprovar</button>
+    <button type="submit" name="acao" value="rejeitar">Rejeitar</button>
+</form>
+{% endif %}
+
+<p><a href="{{ changelist_url }}">Voltar à lista de perguntas</a></p>
+
+{% endblock %}
+
+{% block extrahead %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const topicoSelect = document.querySelector('select[name="topico"]');
+        const nivelSelect = document.getElementById('nivel-select');
+
+        topicoSelect.addEventListener('change', async function () {
+            const topicId = this.value;
+            // limpa options
+            nivelSelect.innerHTML = '';
+            if (!topicId) {
+                nivelSelect.innerHTML = '<option value="">-- primeiro escolha um tópico --</option>';
+                return;
+            }
+
+            nivelSelect.innerHTML = '<option>Carregando...</option>';
+            try {
+                // use levels_url provided by the view (falls back to absolute path)
+                const base = '{{ levels_url|default:"/admin/core/perguntas/levels/" }}';
+                const sep = base.includes('?') ? '&' : '?';
+                const resp = await fetch(`${base}${sep}topic_id=${encodeURIComponent(topicId)}`);
+                if (!resp.ok) throw new Error('Erro ao obter níveis');
+                const data = await resp.json();
+                nivelSelect.innerHTML = '<option value="">-- escolher --</option>';
+                for (const n of data) {
+                    const opt = document.createElement('option');
+                    opt.value = n.id_nivel;
+                    opt.textContent = n.titulo_nivel;
+                    nivelSelect.appendChild(opt);
+                }
+            } catch (err) {
+                nivelSelect.innerHTML = '<option value="">Erro ao carregar níveis</option>';
+                console.error(err);
+            }
+        });
+    });
+</script>
+{% endblock %}

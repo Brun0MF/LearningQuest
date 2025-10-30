@@ -391,7 +391,7 @@ class PerguntasViewSet(viewsets.ModelViewSet):
         if(in_nivel is None):
             return Response({"STATUS":"HTTP_400_BAD_REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            pergunta = Perguntas.objects.get(id_topico=in_topico,id_nivel=in_nivel)
+            pergunta = Perguntas.objects.filter(id_topico=in_topico,id_nivel=in_nivel)
             output = "["
             for p in pergunta:
                 pergunta_cid = p.cid

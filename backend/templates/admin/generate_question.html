@@ -1,0 +1,55 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Gerar Pergunta</h1>
+
+{% if messages %}
+{% for message in messages %}
+<p class="mess {{ message.tags }}">{{ message }}</p>
+{% endfor %}
+{% endif %}
+
+<form method="post" style="margin-bottom:20px">
+    {% csrf_token %}
+    <label>Topico:
+        <select name="topico">
+            <option value="">-- escolher --</option>
+            {% for t in topicos %}
+            <option value="{{ t.id_topico }}">{{ t.titulo_topico }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br />
+    <label>Nivel:
+        <select name="nivel">
+            <option value="">-- escolher --</option>
+            {% for n in niveis %}
+            <option value="{{ n.id_nivel }}">{{ n.titulo_nivel }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <br />
+    <label>Linguagem:
+        <input type="text" name="linguagem" value="python" />
+    </label>
+    <br />
+    <button type="submit">Gerar Pergunta</button>
+</form>
+
+{% if pergunta %}
+<h2>Pergunta gerada (ID: {{ pergunta.id_pergunta }})</h2>
+<p><strong>CID:</strong> {{ pergunta.cid }}</p>
+<h3>Conteúdo retornado pelo serviço AI</h3>
+<pre>{{ question_content|safe|default:"(sem conteúdo)" }}</pre>
+
+<form method="post" action="{{ acao_url }}">
+    {% csrf_token %}
+    <input type="hidden" name="pergunta_id" value="{{ pergunta.id_pergunta }}" />
+    <button type="submit" name="acao" value="aprovar">Aprovar</button>
+    <button type="submit" name="acao" value="rejeitar">Rejeitar</button>
+</form>
+{% endif %}
+
+<p><a href="{% url 'admin:meuadmin_perguntas_changelist' %}">Voltar à lista de perguntas</a></p>
+
+{% endblock %}
