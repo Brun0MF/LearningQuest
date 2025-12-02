@@ -22,7 +22,7 @@ Com uma abordagem que alia diversão e rigor pedagógico, o LearningQuest transf
 
 https://www.youtube.com/watch?v=rHC13qfwR-c&t=5705s<br/>
 Tempo exato: 1:35:05
-
+<hr/>
 🔗 Apresentação do projeto:<br/>
 
 <a href="https://youtu.be/ACEEwBaeKF8"><img src="./files/logos/capa_apresentacao.png" alt="Apresentação Hack4Edu 2025" width="500"></a>
