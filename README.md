@@ -27,6 +27,8 @@ Tempo exato: 1:35:05<br/>
 <hr/>
 🔗 Apresentação do projeto:<br/>
 
+<div align="center">
 <a href="https://youtu.be/ACEEwBaeKF8"><img src="./files/logos/capa_apresentacao.png" alt="Apresentação Hack4Edu 2025" width="500"></a>
+</div>
 
 https://youtu.be/ACEEwBaeKF8
