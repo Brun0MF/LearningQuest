@@ -1,8 +1,8 @@
-# Descrição da Aplicação – LearningQuest
+# Descrição da Aplicação - LearningQuest
 
 <p align="center"> <img src="./files/logos/logoLearningQuest-NoBG.png" alt="Logo LearningQuest" width="250"> </p>
 
-LearningQuest é uma plataforma interativa impulsionada por inteligência artificial, desenvolvida para transformar o processo de aprendizagem de programação numa experiência dinâmica, motivadora e acessível. Criado durante o Hack4Edu 2025 – ProFuturo, na Universidade de Salamanca, o projeto nasceu com o objetivo de unir educação, tecnologia e gamificação para inspirar novos programadores.
+LearningQuest é uma plataforma interativa impulsionada por inteligência artificial, desenvolvida para transformar o processo de aprendizagem de programação numa experiência dinâmica, motivadora e acessível. Criado durante o Hack4Edu 2025 - ProFuturo, na Universidade de Salamanca, o projeto nasceu com o objetivo de unir educação, tecnologia e gamificação para inspirar novos programadores.
 
 A aplicação combina desafios práticos, questionários inteligentes e conteúdos adaptativos, permitindo que cada utilizador aprenda ao seu ritmo enquanto desenvolve competências reais. À medida que progride, o sistema oferece uma experiência semelhante a jogos competitivos:
 
