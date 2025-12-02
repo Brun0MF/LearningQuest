@@ -18,7 +18,7 @@ Com uma abordagem que alia diversão e rigor pedagógico, o LearningQuest transf
 
 🔗 Apresentação oficial no Hack4Edu 2025:<br/>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/rHC13qfwR-c?si=9h-grbnH4cKp_EIH&amp;start=5705" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Apresentação Hack4Edu 2025](./files/logos/capa_hackedu.jpg)](https://www.youtube.com/watch?v=rHC13qfwR-c&t=5705s)
 
 https://www.youtube.com/watch?v=rHC13qfwR-c&t=5705s<br/>
 Tempo exato: 1:35:05
