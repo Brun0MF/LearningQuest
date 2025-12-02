@@ -14,7 +14,7 @@ A aplicação combina desafios práticos, questionários inteligentes e conteúd
 
 🔓 Desbloqueio de novas linguagens, desafios e conteúdos progressivos
 
-Com uma abordagem que alia diversão e rigor pedagógico, o LearningQuest transforma o estudo tradicional numa verdadeira jornada épica — ideal tanto para iniciantes como para quem procura evoluir as suas capacidades de forma consistente e envolvente. A missão é simples: tornar aprender programação algo estimulante, intuitivo e verdadeiramente recompensador.
+Com uma abordagem que alia diversão e rigor pedagógico, o LearningQuest transforma o estudo tradicional numa verdadeira jornada épica - ideal tanto para iniciantes como para quem procura evoluir as suas capacidades de forma consistente e envolvente. A missão é simples: tornar aprender programação algo estimulante, intuitivo e verdadeiramente recompensador.
 
 🔗 Apresentação oficial no Hack4Edu 2025:<br/>
 
