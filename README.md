@@ -1,6 +1,19 @@
 # Descrição da Aplicação – LearningQuest
-O LearningQuest é uma aplicação interativa com inteligência artificial que torna a aprendizagem de programação divertida, envolvente e acessível a todos. Através de desafios práticos e questionários personalizados, os utilizadores podem praticar código, ganhar pontos e evoluir de nível à medida que desenvolvem as suas competências.
 
-Com um sistema de gamificação inspirado em jogos competitivos, cada desafio concluído com sucesso oferece pontos e experiência. À medida que progrides, desbloqueias novos níveis, conteúdos e linguagens de programação, transformando o estudo numa verdadeira jornada de conquista e descoberta.
+LearningQuest é uma plataforma interativa impulsionada por inteligência artificial, desenvolvida para transformar o processo de aprendizagem de programação numa experiência dinâmica, motivadora e acessível. Criado durante o Hack4Edu 2025 – ProFuturo, na Universidade de Salamanca, o projeto nasceu com o objetivo de unir educação, tecnologia e gamificação para inspirar novos programadores.
 
-Criado para motivar e captar a atenção, o LearningQuest redefine a forma de aprender — mesmo para quem acredita que estudar pode ser aborrecido.
+A aplicação combina desafios práticos, questionários inteligentes e conteúdos adaptativos, permitindo que cada utilizador aprenda ao seu ritmo enquanto desenvolve competências reais. À medida que progride, o sistema oferece uma experiência semelhante a jogos competitivos:
+
+ganho de pontos,
+
+acumulação de experiência,
+
+subida de nível,
+
+desbloqueio de novas linguagens, novos desafios e conteúdos progressivos.
+
+Com uma abordagem que alia diversão e rigor pedagógico, o LearningQuest transforma o estudo tradicional numa verdadeira jornada épica — ideal tanto para iniciantes como para quem procura evoluir as suas capacidades de forma consistente e envolvente. A missão é simples: tornar aprender programação algo estimulante, intuitivo e verdadeiramente recompensador.
+
+🔗 Apresentação oficial no Hack4Edu 2025:
+Tempo exato: 1:35:05
+https://www.youtube.com/watch?v=rHC13qfwR-c&t=5705s
